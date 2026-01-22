@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Ana Səhifə | Olric Bookstore{% endblock %}
+
+{% block content %}
+<section class="bg-penguin-navy rounded-3xl overflow-hidden shadow-2xl mb-12 relative">
+    <div class="container mx-auto px-8 py-16 md:py-24 flex flex-col md:flex-row items-center relative z-10">
+        <div class="md:w-1/2 text-center md:text-left">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
+                Kitabların <span class="text-penguin-orange">Sehrli</span> Dünyasını Kəşf Edin
+            </h1>
+            <p class="text-gray-300 text-lg mb-8 max-w-lg">
+                Minlərlə kitab, onlarla janr və ən sevdiyiniz yazıçılar bir ünvanda. Olric ilə mütaliə daha maraqlıdır.
+            </p>
+            <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
+                <a href="#" class="bg-penguin-orange text-white px-8 py-4 rounded-full font-bold hover:bg-opacity-90 transition transform hover:scale-105 shadow-lg">
+                    İndi Alış-veriş Et
+                </a>
+                <a href="#" class="bg-white text-penguin-navy px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition shadow-lg">
+                    Yeni Gələnlər
+                </a>
+            </div>
+        </div>
+        <div class="md:w-1/2 mt-12 md:mt-0 flex justify-center">
+            <div class="relative">
+                <div class="w-64 h-80 bg-white rounded-lg shadow-2xl transform rotate-3 border-4 border-penguin-orange"></div>
+                <div class="w-64 h-80 bg-penguin-yellow rounded-lg shadow-2xl absolute top-4 left-4 -rotate-6 z-[-1]"></div>
+            </div>
+        </div>
+    </div>
+    <div class="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-penguin-orange opacity-10 rounded-full"></div>
+</section>
+
+<section class="mb-16">
+    <div class="flex justify-between items-center mb-8">
+        <h2 class="text-3xl font-bold text-penguin-navy">Kateqoriyalar</h2>
+        <a href="#" class="text-penguin-orange font-semibold hover:underline">Hamısına bax <i class="fas fa-arrow-right ml-2"></i></a>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {% for cat in categories %}
+        <a href="#" class="group bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:border-penguin-orange transition text-center">
+            <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-penguin-orange group-hover:text-white transition text-penguin-navy text-2xl">
+                <i class="fas fa-book"></i>
+            </div>
+            <h3 class="font-bold text-penguin-navy">{{ cat.name }}</h3>
+            <p class="text-xs text-gray-500 mt-1">{{ cat.books.count }} kitab</p>
+        </a>
+        {% empty %}
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
+            <h3 class="font-bold text-penguin-navy italic">Bədii Ədəbiyyat</h3>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mb-16">
+    <div class="flex justify-between items-center mb-8">
+        <h2 class="text-3xl font-bold text-penguin-navy">Ən çox satılanlar</h2>
+        <div class="flex space-x-2">
+            <button class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-penguin-navy hover:text-white transition">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-penguin-navy hover:text-white transition">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {% for book in featured_books %}
+        <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition group border border-gray-100">
+            <div class="relative aspect-[3/4] bg-gray-100 overflow-hidden">
+                {% if book.cover_image %}
+                <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                {% endif %}
+                <div class="absolute top-4 right-4 flex flex-col space-y-2 translate-x-12 group-hover:translate-x-0 transition duration-300">
+                    <button class="bg-white p-3 rounded-full shadow-md text-red-500 hover:bg-red-500 hover:text-white transition">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <button class="bg-white p-3 rounded-full shadow-md text-penguin-navy hover:bg-penguin-navy hover:text-white transition">
+                        <i class="fas fa-shopping-basket"></i>
+                    </button>
+                </div>
+                {% if book.discount_price %}
+                <span class="absolute top-4 left-4 bg-penguin-orange text-white px-3 py-1 rounded-lg text-xs font-bold">
+                    Endirim
+                </span>
+                {% endif %}
+            </div>
+            <div class="p-6">
+                <p class="text-xs text-penguin-orange font-bold uppercase mb-2">{{ book.categories.first.name }}</p>
+                <h3 class="font-bold text-penguin-navy mb-1 truncate">{{ book.title }}</h3>
+                <p class="text-sm text-gray-500 mb-4">{{ book.authors.first.name }}</p>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-xl font-black text-penguin-navy">{{ book.final_price }} AZN</span>
+                        {% if book.discount_price %}
+                        <span class="text-sm text-gray-400 line-through ml-2">{{ book.price }} AZN</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
