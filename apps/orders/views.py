@@ -77,3 +77,43 @@ def order_list(request):
 def order_detail(request, order_number):
     order = get_object_or_404(Order, order_number=order_number, user=request.user)
     return render(request, 'orders/order_detail.html', {'order': order})
+
+def order_track(request, order_number):
+    """
+    Public tracking page for customers to check delivery status
+    """
+    order = get_object_or_404(Order, order_number=order_number)
+    
+    # Define all possible statuses with display info
+    tracking_stages = [
+        {'key': 'pending', 'label': 'Gözləyir', 'icon': 'clock'},
+        {'key': 'assigned', 'label': 'Kuryer təyin edilib', 'icon': 'user-check'},
+        {'key': 'picked_up', 'label': 'Götürülüb', 'icon': 'box'},
+        {'key': 'in_transit', 'label': 'Yoldadır', 'icon': 'truck'},
+        {'key': 'delivered', 'label': 'Çatdırılıb', 'icon': 'check-circle'},
+    ]
+    
+    # Get current delivery status
+    current_status = None
+    delivery = None
+    if hasattr(order, 'delivery'):
+        delivery = order.delivery
+        current_status = delivery.status
+    
+    # Mark stages as complete based on current status
+    status_order = ['pending', 'assigned', 'picked_up', 'in_transit', 'delivered']
+    current_index = status_order.index(current_status) if current_status in status_order else -1
+    
+    for i, stage in enumerate(tracking_stages):
+        stage['is_complete'] = i <= current_index
+        stage['is_current'] = i == current_index
+    
+    context = {
+        'order': order,
+        'delivery': delivery,
+        'tracking_stages': tracking_stages,
+        'current_status': current_status,
+    }
+    
+    return render(request, 'orders/order_track.html', context)
+

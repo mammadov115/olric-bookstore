@@ -82,12 +82,12 @@ This document serves as the primary tracking mechanism for the development of Ol
 ## 🚚 6. Logistics & Delivery (Delivery App)
 *Tracking the physical journey of the books.*
 
-- [ ] **Fulfillment Tracking**
+- [x] **Fulfillment Tracking**
     - **Models:** `Courier`, `Delivery`.
     - **Visual/Functional Result:** Internal tracking system for staff to assign couriers and update delivery status.
-- [ ] **Customer Tracking Dashboard**
+- [x] **Customer Tracking Dashboard**
     - **Logic:** Unique tracking numbers and progress visualization.
-    - **Visual/Functional Result:** A tracking page where customers see the real-time status (Picked up > En route > Delivered).
+    - **Visual/Functional Result:** A tracking page where customers see the real-time status (Picked up > En route > Delivered) and receive automatic SMS notifications.
 
 ## 🌟 7. Engagement & Social Proof (Reviews & Wishlist)
 *Building community trust and user retention.*

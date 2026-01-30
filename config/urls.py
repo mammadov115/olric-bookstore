@@ -11,13 +11,13 @@ urlpatterns = [
     # path('api/v1/', include('apps.api.urls')),
     
     # Apps
-    # path('', include('apps.pages.urls')),
+    path('', include('apps.books.urls')),
     path('accounts/', include('apps.accounts.urls')),
-    path('books/', include('apps.books.urls')),
     path('cart/', include('apps.cart.urls')),
     path('orders/', include('apps.orders.urls')),
     path('payments/', include('apps.payments.urls')),
     path('coupons/', include('apps.coupons.urls')),
+    path('dashboard/', include('apps.dashboard.urls')),
 ]
 
 # Serve media files in development

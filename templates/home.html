@@ -80,7 +80,9 @@
                     <a href="{{ book.get_absolute_url }}" class="bg-white p-3 rounded-full shadow-md text-penguin-navy hover:bg-penguin-navy hover:text-white transition">
                         <i class="fas fa-eye"></i>
                     </a>
-                    <button class="bg-white p-3 rounded-full shadow-md text-penguin-navy hover:bg-penguin-navy hover:text-white transition">
+                    <button class="add-to-cart bg-white p-3 rounded-full shadow-md text-penguin-navy hover:bg-penguin-navy hover:text-white transition" 
+                            data-url="{% url 'cart:cart_add' book.id %}" 
+                            data-qty="1">
                         <i class="fas fa-shopping-basket"></i>
                     </button>
                 </div>

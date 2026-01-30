@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olric Admin | Dashboard</title>
+    
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'penguin-orange': '#FF6600',
+                        'penguin-navy': '#003B5C',
+                        'glass-bg': 'rgba(255, 255, 255, 0.7)',
+                    },
+                    backdropBlur: {
+                        'xs': '2px',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .dark-glass { background: rgba(0, 59, 92, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .sidebar-link.active { background: #FF6600; color: white; box-shadow: 0 10px 15px -3px rgba(255, 102, 0, 0.4); }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-[#f8fafc] text-slate-800 overflow-hidden">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 transition-transform duration-300 transform -translate-x-full md:translate-x-0 bg-penguin-navy text-white flex flex-col">
+            <div class="p-8">
+                <a href="/" class="text-2xl font-black flex items-center gap-2">
+                    <span class="w-10 h-10 bg-penguin-orange rounded-xl flex items-center justify-center rotate-3 shadow-lg group-hover:rotate-0 transition-all">
+                        <i class="fas fa-book-open text-white"></i>
+                    </span>
+                    <span>Olric<span class="text-penguin-orange">Admin</span></span>
+                </a>
+            </div>
+            
+            <nav class="flex-grow px-4 space-y-2 overflow-y-auto">
+                <p class="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Əsas Menyu</p>
+                
+                <button hx-get="{% url 'dashboard:stats' %}" 
+                        hx-target="#dashboard-content" 
+                        hx-push-url="true"
+                        class="sidebar-link active w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group">
+                    <i class="fas fa-chart-pie text-lg transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold">İcmal</span>
+                </button>
+
+                <button hx-get="{% url 'dashboard:orders' %}" 
+                        hx-target="#dashboard-content" 
+                        hx-push-url="true"
+                        class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group hover:bg-white/10">
+                    <i class="fas fa-shopping-bag text-lg transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold">Sifarişlər</span>
+                </button>
+
+                <button hx-get="{% url 'dashboard:books' %}" 
+                        hx-target="#dashboard-content" 
+                        hx-push-url="true"
+                        class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group hover:bg-white/10">
+                    <i class="fas fa-book text-lg transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold">Kitablar</span>
+                </button>
+
+                <button hx-get="{% url 'dashboard:users' %}" 
+                        hx-target="#dashboard-content" 
+                        hx-push-url="true"
+                        class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group hover:bg-white/10">
+                    <i class="fas fa-users text-lg transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold">İstifadəçilər</span>
+                </button>
+            </nav>
+
+            <div class="p-6">
+                <div class="bg-white/5 rounded-3xl p-4 border border-white/10">
+                    <p class="text-xs text-slate-400 mb-2">Giriş edib:</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-penguin-orange flex items-center justify-center font-bold">
+                            {{ request.user.first_name|first }}
+                        </div>
+                        <div class="overflow-hidden">
+                            <p class="font-bold truncate text-sm">{{ request.user.get_full_name }}</p>
+                            <p class="text-[10px] text-slate-400 truncate">{{ request.user.email }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-grow flex flex-col md:ml-72 bg-[#f8fafc] h-screen overflow-hidden">
+            <!-- Topbar -->
+            <header class="h-20 glass sticky top-0 z-40 px-8 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <button id="mobile-sidebar-toggle" class="md:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2 id="page-title" class="text-xl font-bold text-slate-800">İdarəetmə Paneli</h2>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <div class="relative hidden sm:block">
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" placeholder="Sürətli axtarış..." class="pl-12 pr-4 py-2.5 bg-slate-100 rounded-xl text-sm w-64 border-none focus:outline-none focus:ring-2 focus:ring-penguin-orange/50 transition-all">
+                    </div>
+                    
+                    <button class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-penguin-orange hover:text-white transition-all">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    
+                    <a href="{% url 'accounts:logout' %}" class="px-4 py-2 bg-red-50 text-red-600 rounded-xl text-sm font-bold hover:bg-red-600 hover:text-white transition-all flex items-center gap-2">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span class="hidden sm:inline">Çıxış</span>
+                    </a>
+                </div>
+            </header>
+
+            <!-- Dynamic Content -->
+            <div id="dashboard-content" 
+                 class="flex-grow overflow-y-auto p-4 md:p-8"
+                 hx-get="{% url 'dashboard:stats' %}"
+                 hx-trigger="load">
+                <!-- Loading State -->
+                <div class="h-full flex items-center justify-center">
+                    <div class="w-12 h-12 border-4 border-penguin-orange/20 border-t-penguin-orange rounded-full animate-spin"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mobile Overlay -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden transition-opacity"></div>
+
+    <script>
+        // Sidebar active link handling
+        document.body.addEventListener('htmx:afterOnLoad', function(evt) {
+            if (evt.detail.target.id === 'dashboard-content') {
+                // Update active state in sidebar
+                const activePath = evt.detail.requestConfig.path;
+                document.querySelectorAll('.sidebar-link').forEach(link => {
+                    const linkPath = link.getAttribute('hx-get');
+                    if (activePath.includes(linkPath) || (linkPath === '{% url "dashboard:stats" %}' && activePath === '{% url "dashboard:index" %}')) {
+                        link.classList.add('active');
+                        link.classList.remove('hover:bg-white/10');
+                    } else {
+                        link.classList.remove('active');
+                        link.classList.add('hover:bg-white/10');
+                    }
+                });
+                
+                // Update page title if needed (can be handled in partials too)
+                const titleMap = {
+                    '{% url "dashboard:stats" %}': 'İcmal',
+                    '{% url "dashboard:orders" %}': 'Sifarişlər',
+                    '{% url "dashboard:books" %}': 'Kitablar',
+                    '{% url "dashboard:users" %}': 'İstifadəçilər'
+                };
+                for (const path in titleMap) {
+                    if (activePath.includes(path)) {
+                        document.getElementById('page-title').innerText = titleMap[path];
+                    }
+                }
+                
+                // Close mobile sidebar on navigation
+                closeSidebar();
+            }
+        });
+
+        // Mobile Sidebar Logic
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        const toggle = document.getElementById('mobile-sidebar-toggle');
+
+        function openSidebar() {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.add('opacity-100'), 0);
+        }
+
+        function closeSidebar() {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.remove('opacity-100');
+            setTimeout(() => overlay.classList.add('hidden'), 300);
+        }
+
+        toggle?.addEventListener('click', openSidebar);
+        overlay?.addEventListener('click', closeSidebar);
+    </script>
+</body>
+</html>

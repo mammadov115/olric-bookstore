@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Sifarişi İzlə - {{ order.order_number }} | Olric Bookstore{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto mb-12 px-4">
+    <!-- Header -->
+    <div class="text-center mb-12">
+        <h1 class="text-3xl font-extrabold text-penguin-navy mb-2">Sifarişi İzlə</h1>
+        <p class="text-gray-500">Sifariş Nömrəsi: <span class="font-bold text-penguin-orange">{{ order.order_number }}</span></p>
+    </div>
+
+    <!-- Tracking Progress Bar -->
+    <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 mb-8">
+        <div class="relative">
+            <!-- Progress Line -->
+            <div class="absolute top-8 left-0 right-0 h-1 bg-gray-200" style="z-index: 0;"></div>
+            <div class="absolute top-8 left-0 h-1 bg-penguin-orange transition-all duration-500" 
+                 style="width: {% if current_status == 'delivered' %}100{% elif current_status == 'in_transit' %}75{% elif current_status == 'picked_up' %}50{% elif current_status == 'assigned' %}25{% else %}0{% endif %}%; z-index: 1;">
+            </div>
+
+            <!-- Stages -->
+            <div class="relative flex justify-between" style="z-index: 2;">
+                {% for stage in tracking_stages %}
+                <div class="flex flex-col items-center" style="width: 20%;">
+                    <!-- Icon Circle -->
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mb-3 transition-all duration-300
+                                {% if stage.is_complete %}bg-penguin-orange text-white shadow-lg scale-110
+                                {% elif stage.is_current %}bg-penguin-navy text-white animate-pulse
+                                {% else %}bg-gray-200 text-gray-400{% endif %}">
+                        <i class="fas fa-{{ stage.icon }} text-xl"></i>
+                    </div>
+                    
+                    <!-- Label -->
+                    <p class="text-xs font-bold text-center 
+                              {% if stage.is_complete or stage.is_current %}text-penguin-navy
+                              {% else %}text-gray-400{% endif %}">
+                        {{ stage.label }}
+                    </p>
+                    
+                    {% if stage.is_current %}
+                    <span class="mt-1 px-2 py-1 bg-penguin-orange text-white text-xs rounded-full">Cari</span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Delivery Details -->
+    {% if delivery %}
+    <div class="bg-gray-50 rounded-3xl p-8 border border-gray-200 mb-8">
+        <h2 class="text-xl font-bold text-penguin-navy mb-6 flex items-center">
+            <i class="fas fa-info-circle mr-2 text-penguin-orange"></i>
+            Çatdırılma Məlumatları
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% if delivery.courier %}
+            <div>
+                <p class="text-xs text-gray-400 uppercase font-bold mb-1">Kuryer</p>
+                <p class="text-gray-700 font-bold">{{ delivery.courier.name }}</p>
+                <p class="text-sm text-gray-500">{{ delivery.courier.phone }}</p>
+            </div>
+            {% endif %}
+            
+            {% if delivery.tracking_number %}
+            <div>
+                <p class="text-xs text-gray-400 uppercase font-bold mb-1">İzləmə Nömrəsi</p>
+                <p class="text-gray-700 font-mono font-bold">{{ delivery.tracking_number }}</p>
+            </div>
+            {% endif %}
+            
+            {% if delivery.assigned_at %}
+            <div>
+                <p class="text-xs text-gray-400 uppercase font-bold mb-1">Təyin Edilib</p>
+                <p class="text-gray-700">{{ delivery.assigned_at|date:"d.m.Y H:i" }}</p>
+            </div>
+            {% endif %}
+            
+            {% if delivery.picked_up_at %}
+            <div>
+                <p class="text-xs text-gray-400 uppercase font-bold mb-1">Götürülüb</p>
+                <p class="text-gray-700">{{ delivery.picked_up_at|date:"d.m.Y H:i" }}</p>
+            </div>
+            {% endif %}
+            
+            {% if delivery.delivered_at %}
+            <div>
+                <p class="text-xs text-gray-400 uppercase font-bold mb-1">Çatdırılıb</p>
+                <p class="text-gray-700">{{ delivery.delivered_at|date:"d.m.Y H:i" }}</p>
+            </div>
+            {% endif %}
+        </div>
+        
+        {% if delivery.notes %}
+        <div class="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-100">
+            <p class="text-xs text-blue-600 uppercase font-bold mb-1">Qeyd</p>
+            <p class="text-blue-900">{{ delivery.notes }}</p>
+        </div>
+        {% endif %}
+    </div>
+    {% else %}
+    <div class="bg-yellow-50 rounded-3xl p-8 border border-yellow-200 text-center">
+        <i class="fas fa-clock text-4xl text-yellow-500 mb-4"></i>
+        <p class="text-yellow-800 font-bold">Çatdırılma hələ təyin edilməyib</p>
+        <p class="text-yellow-600 text-sm mt-2">Sifarişiniz hazırlanır. Tezliklə kuryer təyin ediləcək.</p>
+    </div>
+    {% endif %}
+
+    <!-- Order Summary -->
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+        <h2 class="text-xl font-bold text-penguin-navy mb-6">Sifariş Xülasəsi</h2>
+        
+        <div class="space-y-3 text-sm">
+            <div class="flex justify-between">
+                <span class="text-gray-500">Məhsul sayı</span>
+                <span class="font-bold text-gray-700">{{ order.items.count }}</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-gray-500">Ümumi Məbləğ</span>
+                <span class="font-bold text-penguin-orange text-lg">{{ order.total_amount|floatformat:2 }} AZN</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-gray-500">Çatdırılma Ünvanı</span>
+                <span class="font-bold text-gray-700 text-right">{{ order.address }}, {{ order.city }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SMS Notification Info -->
+    <div class="mt-8 text-center">
+        <div class="inline-flex items-center bg-green-50 px-6 py-3 rounded-full border border-green-200">
+            <i class="fas fa-sms text-green-600 mr-2"></i>
+            <p class="text-sm text-green-700">Status dəyişdikdə <span class="font-bold">{{ order.phone }}</span> nömrəsinə SMS göndəriləcək</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

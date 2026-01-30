@@ -109,7 +109,7 @@ class Book(models.Model):
 
     @property
     def final_price(self):
-        return self.discount_price if self.discount_price else self.price
+        return self.discount_price if self.discount_price else (self.price or 0)
 
     def is_in_stock(self):
         return self.stock > 0

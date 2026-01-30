@@ -1,0 +1,121 @@
+<div class="animate-fade-in space-y-8">
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Revenue -->
+        <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 group hover:shadow-xl hover:shadow-penguin-orange/5 transition-all duration-500">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center group-hover:bg-penguin-orange transition-colors">
+                    <i class="fas fa-money-bill-wave text-penguin-orange group-hover:text-white"></i>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Son 30 gün</p>
+                    <p class="text-xs font-bold text-green-500">{{ revenue_30d|floatformat:2 }} AZN</p>
+                </div>
+            </div>
+            <p class="text-slate-400 text-sm font-medium">Cəmi Gəlir</p>
+            <h3 class="text-2xl font-black text-penguin-navy">{{ total_revenue|floatformat:2 }} AZN</h3>
+        </div>
+
+        <!-- Orders -->
+        <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 group hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-500">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center group-hover:bg-blue-500 transition-colors">
+                    <i class="fas fa-shopping-cart text-blue-500 group-hover:text-white"></i>
+                </div>
+                <span class="text-[10px] font-black text-blue-500 bg-blue-50 px-2 py-1 rounded-full">Canlı</span>
+            </div>
+            <p class="text-slate-400 text-sm font-medium">Sifarişlər</p>
+            <h3 class="text-2xl font-black text-penguin-navy">{{ total_orders }}</h3>
+        </div>
+
+        <!-- Books -->
+        <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 group hover:shadow-xl hover:shadow-purple-500/5 transition-all duration-500">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center group-hover:bg-purple-500 transition-colors">
+                    <i class="fas fa-book text-purple-500 group-hover:text-white"></i>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Aktiv Kitab</p>
+                    <p class="text-xs font-bold text-purple-500">{{ total_books }}</p>
+                </div>
+            </div>
+            <p class="text-slate-400 text-sm font-medium">Kitab Sayı</p>
+            <h3 class="text-2xl font-black text-penguin-navy">{{ total_books }}</h3>
+        </div>
+
+        <!-- Users -->
+        <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 group hover:shadow-xl hover:shadow-emerald-500/5 transition-all duration-500">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-500 transition-colors">
+                    <i class="fas fa-users text-emerald-500 group-hover:text-white"></i>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Yeni (30g)</p>
+                    <p class="text-xs font-bold text-emerald-500">+{{ new_users_30d }}</p>
+                </div>
+            </div>
+            <p class="text-slate-400 text-sm font-medium">İstifadəçilər</p>
+            <h3 class="text-2xl font-black text-penguin-navy">{{ total_users }}</h3>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Sales Chart -->
+        <div class="lg:col-span-2 bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h4 class="text-lg font-black text-penguin-navy">Gündəlik Gəlir</h4>
+                    <p class="text-xs text-slate-400">Son 7 günün fəaliyyəti</p>
+                </div>
+                <div class="bg-slate-50 border-none text-[10px] font-bold rounded-xl px-4 py-2">
+                    Həftəlik Görünüş
+                </div>
+            </div>
+{% load l10n %}
+            <div class="h-72 w-full flex items-end justify-between gap-4 pb-2 px-4">
+                {% for day in chart_data %}
+                <div class="flex-grow bg-slate-200 rounded-t-2xl transition-all hover:bg-penguin-orange group relative cursor-pointer" style="height: {{ day.height|unlocalize }}%; min-width: 40px;">
+                    <div class="absolute -top-12 left-1/2 -translate-x-1/2 bg-penguin-navy text-white text-[10px] py-2 px-3 rounded-xl opacity-0 group-hover:opacity-100 transition-all shadow-xl whitespace-nowrap z-50">
+                        <span class="font-black">{{ day.revenue|unlocalize }} AZN</span>
+                    </div>
+                    <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-black text-slate-400 uppercase whitespace-nowrap">
+                        {{ day.date }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100">
+            <h4 class="text-lg font-black text-penguin-navy mb-6">Son Sifarişlər</h4>
+            <div class="space-y-6">
+                {% for order in recent_orders %}
+                <div class="flex items-center gap-4 group">
+                    <div class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center font-bold text-slate-400 group-hover:bg-penguin-orange/10 group-hover:text-penguin-orange transition-all">
+                        #{{ forloop.counter }}
+                    </div>
+                    <div class="flex-grow overflow-hidden">
+                        <p class="text-sm font-bold text-slate-800 truncate">{{ order.full_name }}</p>
+                        <p class="text-[10px] text-slate-400 uppercase tracking-tighter">{{ order.order_number }} • {{ order.created_at|date:"d M, H:i" }}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm font-black text-penguin-navy">{{ order.total_amount|floatformat:2 }}</p>
+                        <span class="text-[9px] font-bold px-2 py-0.5 rounded-full 
+                            {% if order.status == 'delivered' %}bg-green-100 text-green-600
+                            {% elif order.status == 'pending' %}bg-yellow-100 text-yellow-600
+                            {% else %}bg-blue-100 text-blue-600{% endif %}">
+                            {{ order.get_status_display }}
+                        </span>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-center text-slate-400 py-8">Hələ sifariş yoxdur.</p>
+                {% endfor %}
+            </div>
+            <button hx-get="{% url 'dashboard:orders' %}" hx-target="#dashboard-content" class="w-full mt-8 py-3 bg-slate-50 text-slate-600 rounded-2xl text-xs font-bold hover:bg-penguin-navy hover:text-white transition-all">
+                Hamısına bax
+            </button>
+        </div>
+    </div>
+</div>

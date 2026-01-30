@@ -65,13 +65,16 @@
                 
                 {% if request.user.is_authenticated %}
                     {% if request.user.is_staff %}
-                    <a href="{% url 'admin:index' %}" class="text-penguin-navy hover:text-penguin-orange font-bold text-sm mr-2" title="Admin Panel">
-                        <i class="fas fa-tools"></i>
+                    <a href="{% url 'dashboard:index' %}" class="px-4 py-2 bg-penguin-navy text-white rounded-xl text-xs font-bold hover:bg-penguin-orange transition-all shadow-lg shadow-penguin-navy/10 flex items-center gap-2">
+                        <i class="fas fa-chart-line"></i> Dashboard
+                    </a>
+                    <a href="{% url 'admin:index' %}" class="text-penguin-navy/30 hover:text-penguin-orange font-bold text-sm" title="Default Admin">
+                        <i class="fas fa-cog"></i>
                     </a>
                     {% endif %}
-                    <a href="#" class="text-gray-600 hover:text-penguin-orange"><i class="fas fa-user"></i></a>
+                    <a href="#" class="text-gray-600 hover:text-penguin-orange ml-2"><i class="fas fa-user"></i></a>
                 {% else %}
-                    <a href="{% url 'login' %}" class="text-sm font-medium text-penguin-navy hover:text-penguin-orange">Giriş</a>
+                    <a href="{% url 'accounts:login' %}" class="text-sm font-medium text-penguin-navy hover:text-penguin-orange">Giriş</a>
                 {% endif %}
             </div>
         </div>
