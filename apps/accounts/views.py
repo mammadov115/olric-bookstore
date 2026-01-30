@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib.auth import login, authenticate
 from apps.accounts.models import User, Profile
-from apps.accounts.forms import UserRegisterForm # Bu formanı aşağıda tərif edəcəyik
+from apps.accounts.forms import UserRegisterForm
 
 class RegisterView(CreateView):
     model = User
@@ -25,5 +25,4 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('books:home')
 
     def get_object(self, queryset=None):
-        # Login olan istifadəçinin öz profilini qaytarır
         return self.request.user.profile
