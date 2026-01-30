@@ -1,41 +1,41 @@
 <div id="mini-cart-dropdown" class="absolute right-0 mt-4 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 overflow-hidden translate-y-2 group-hover:translate-y-0">
     <div class="p-6">
-        <h3 class="text-sm font-bold text-penguin-navy uppercase tracking-wider mb-4">Səbətin</h3>
+        <h3 class="text-xs font-black text-secondary uppercase tracking-[0.2em] mb-6">Səbətiniz</h3>
         
         {% if cart.get_total_items > 0 %}
-        <div class="space-y-4 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+        <div class="space-y-5 max-h-72 overflow-y-auto pr-2 custom-scrollbar">
             {% for item in cart %}
-            <div class="flex items-center space-x-4">
-                <div class="w-12 h-16 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0">
+            <div class="flex items-center space-x-4 group/item">
+                <div class="w-14 h-20 bg-gray-50 rounded-xl overflow-hidden flex-shrink-0 shadow-sm border border-gray-100">
                     {% if item.book.cover_image %}
-                    <img src="{{ item.book.cover_image.url }}" alt="{{ item.book.title }}" class="w-full h-full object-cover">
+                    <img src="{{ item.book.cover_image.url }}" alt="{{ item.book.title }}" class="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-500">
                     {% else %}
                     <div class="w-full h-full flex items-center justify-center text-gray-300">
                         <i class="fas fa-book text-xs"></i>
                     </div>
                     {% endif %}
                 </div>
-                <div class="flex-grow">
-                    <h4 class="text-xs font-bold text-penguin-navy truncate w-40">{{ item.book.title }}</h4>
-                    <p class="text-[10px] text-gray-400 mt-0.5">{{ item.quantity }} x {{ item.book.final_price }} AZN</p>
+                <div class="flex-grow min-w-0">
+                    <h4 class="text-xs font-bold text-secondary truncate mb-1">{{ item.book.title }}</h4>
+                    <p class="text-[10px] font-bold text-gray-400">{{ item.quantity }} x {{ item.book.final_price }} AZN</p>
                 </div>
-                <div class="text-xs font-bold text-penguin-navy">
+                <div class="text-xs font-black text-secondary">
                     {{ item.subtotal }} AZN
                 </div>
             </div>
             {% endfor %}
         </div>
         
-        <div class="mt-6 pt-6 border-t border-gray-50 flex items-center justify-between">
-            <span class="text-xs font-bold text-gray-400">Cəmi:</span>
-            <span class="text-lg font-black text-penguin-navy">{{ cart.get_total_price }} AZN</span>
+        <div class="mt-8 pt-6 border-t border-gray-100 flex items-center justify-between">
+            <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Cəmi:</span>
+            <span class="text-xl font-black text-secondary">{{ cart.get_total_price }} AZN</span>
         </div>
         
-        <div class="mt-6 grid grid-cols-2 gap-4">
-            <a href="{% url 'cart:cart_detail' %}" class="text-center py-3 rounded-xl border border-gray-100 text-xs font-bold text-gray-600 hover:bg-gray-50 transition">
+        <div class="mt-8 grid grid-cols-2 gap-4">
+            <a href="{% url 'cart:cart_detail' %}" class="text-center py-4 rounded-2xl border border-gray-100 text-[10px] font-black uppercase tracking-widest text-gray-500 hover:bg-gray-50 transition-all">
                 Səbətə bax
             </a>
-            <a href="{% url 'orders:order_create' %}" class="text-center py-3 rounded-xl bg-penguin-navy text-white text-xs font-bold hover:bg-penguin-orange transition shadow-lg">
+            <a href="{% url 'orders:order_create' %}" class="text-center py-4 rounded-2xl bg-secondary text-white text-[10px] font-black uppercase tracking-widest hover:bg-primary transition-all shadow-xl shadow-secondary/10">
                 Sifariş et
             </a>
         </div>

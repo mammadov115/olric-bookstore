@@ -15,12 +15,15 @@
             theme: {
                 extend: {
                     colors: {
+                        'primary': '#FF6600',
+                        'secondary': '#003B5C',
                         'penguin-orange': '#FF6600',
                         'penguin-navy': '#003B5C',
                         'penguin-yellow': '#FFD700',
                     },
                     fontFamily: {
-                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'sans': ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+                        'outfit': ['Outfit', 'sans-serif'],
                     }
                 }
             }
@@ -35,37 +38,36 @@
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen pb-20 md:pb-0">
     <!-- Navbar -->
-    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-[90] border-b border-gray-100">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center h-16 md:h-20">
-            <a href="/" class="text-xl md:text-2xl font-black text-penguin-navy flex items-center gap-2">
-                <span class="w-8 h-8 md:w-10 md:h-10 bg-primary rounded-xl flex items-center justify-center rotate-3 shadow-lg">
-                    <i class="fas fa-book-open text-white text-sm md:text-base"></i>
+    <nav class="bg-white/95 backdrop-blur-xl sticky top-0 z-[90] border-b border-gray-100 shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center h-16 md:h-24">
+            <a href="/" class="text-xl md:text-3xl font-black text-secondary flex items-center gap-3 group">
+                <span class="w-10 h-10 md:w-12 md:h-12 bg-primary rounded-2xl flex items-center justify-center rotate-3 shadow-lg shadow-primary/20 group-hover:rotate-0 transition-all duration-500">
+                    <i class="fas fa-book-open text-white text-base md:text-xl"></i>
                 </span>
-                <span>Olric<span class="text-primary">Books</span></span>
+                <span class="tracking-tighter">Olric<span class="text-primary">Books</span></span>
             </a>
             
-            <div class="hidden md:flex space-x-8">
-                <a href="{% url 'books:book_list' %}" class="nav-link">Kitablar</a>
-                <a href="{% url 'books:category_list' %}" class="nav-link">Kateqoriyalar</a>
-                <a href="#" class="nav-link text-red-500 font-bold">Endirimlər</a>
+            <div class="hidden lg:flex items-center space-x-10">
+                <a href="{% url 'books:book_list' %}" class="nav-link text-sm uppercase tracking-widest font-black {% if request.resolver_match.url_name == 'book_list' or request.resolver_match.url_name == 'book_detail' %}active{% endif %}">Kitablar</a>
+                <a href="{% url 'books:category_list' %}" class="nav-link text-sm uppercase tracking-widest font-black {% if 'category' in request.resolver_match.url_name %}active{% endif %}">Kateqoriyalar</a>
+                <a href="#" class="nav-link text-sm uppercase tracking-widest font-black">Endirimlər</a>
             </div>
 
-            <div class="flex items-center space-x-3 md:space-x-6">
-                <!-- Search Icon (Mobile) -->
-                <a href="{% url 'books:book_list' %}" class="w-10 h-10 flex items-center justify-center rounded-full text-gray-600 hover:bg-gray-100 transition md:hidden">
+            <div class="flex items-center space-x-4 md:space-x-8">
+                <!-- Search Icon (Desktop/Mobile) -->
+                <a href="{% url 'books:book_list' %}" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl text-secondary hover:bg-gray-100 transition-all">
                     <i class="fas fa-search text-lg"></i>
                 </a>
 
                 <div class="relative group">
-                    <a href="{% url 'cart:cart_detail' %}" class="text-gray-600 hover:text-primary h-10 w-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition relative">
-                        <i class="fas fa-shopping-cart text-lg"></i>
+                    <a href="{% url 'cart:cart_detail' %}" class="text-secondary hover:text-primary h-10 w-10 md:h-12 md:w-12 flex items-center justify-center rounded-2xl hover:bg-gray-100 transition-all relative">
+                        <i class="fas fa-shopping-basket text-xl"></i>
                         {% if cart.get_total_items > 0 %}
-                        <span class="navbar-cart-count absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full group-hover:scale-110 transition">
+                        <span class="navbar-cart-count absolute -top-1 -right-1 bg-primary text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full shadow-lg shadow-primary/30 ring-4 ring-white">
                             {{ cart.get_total_items }}
                         </span>
                         {% endif %}
                     </a>
-                    
                     <!-- Floating Cart Summary - Hidden on mobile for better UX -->
                     <div id="mini-cart-container" class="hidden md:block">
                         {% include 'cart/includes/mini_cart.html' %}
@@ -73,27 +75,25 @@
                 </div>
                 
                 {% if request.user.is_authenticated %}
-                    <div class="hidden md:flex items-center gap-4">
-                        {% if request.user.is_staff %}
-                        <a href="{% url 'dashboard:index' %}" class="btn-secondary px-4 py-2 rounded-xl text-xs font-bold hover:scale-105 transition-all shadow-lg shadow-secondary/10 flex items-center gap-2">
-                            <i class="fas fa-chart-line"></i> Dashboard
-                        </a>
-                        {% endif %}
-                        <div class="flex items-center gap-3 bg-gray-50 p-1.5 pr-4 rounded-full border border-gray-100">
-                            <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-xs">
-                                {{ request.user.first_name|first|default:request.user.email|first }}
+                    <div class="hidden md:flex items-center gap-5">
+                        <div class="flex items-center gap-3 bg-gray-50 p-1.5 pr-5 rounded-2xl border border-gray-100 hover:border-primary/30 transition-colors cursor-pointer group">
+                            <div class="w-9 h-9 rounded-xl bg-secondary flex items-center justify-center text-white font-black text-xs shadow-lg group-hover:bg-primary transition-colors">
+                                {{ request.user.first_name|first|default:request.user.email|first|upper }}
                             </div>
-                            <span class="text-xs font-bold text-secondary">{{ request.user.first_name|default:request.user.email }}</span>
+                            <div class="flex flex-col">
+                                <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">Xoş gəldin</span>
+                                <span class="text-sm font-bold text-secondary leading-none">{{ request.user.first_name|default:request.user.email }}</span>
+                            </div>
                         </div>
                         <form action="{% url 'accounts:logout' %}" method="post" class="inline">
                             {% csrf_token %}
-                            <button type="submit" class="text-xs font-black text-red-400 hover:text-red-600 uppercase tracking-tighter transition-all">
-                                <i class="fas fa-sign-out-alt"></i>
+                            <button type="submit" class="w-10 h-10 flex items-center justify-center rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all">
+                                <i class="fas fa-power-off text-lg"></i>
                             </button>
                         </form>
                     </div>
                 {% else %}
-                    <a href="{% url 'accounts:login' %}" class="hidden md:flex btn-primary px-6 py-2  rounded-xl text-sm font-bold shadow-lg">Giriş</a>
+                    <a href="{% url 'accounts:login' %}" class="hidden md:flex btn-primary px-8 py-3 rounded-2xl text-sm font-black shadow-xl">Giriş</a>
                 {% endif %}
             </div>
         </div>
@@ -101,25 +101,25 @@
 
     <!-- Mobile Bottom Navigation -->
     <nav class="mobile-nav">
-        <a href="/" class="mobile-nav-item {% if request.path == '/' %}active{% endif %}">
+        <a href="{% url 'books:home' %}" class="mobile-nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
             <i class="fas fa-home"></i>
             <span>Ana Səhifə</span>
         </a>
-        <a href="{% url 'books:book_list' %}" class="mobile-nav-item {% if 'books' in request.path %}active{% endif %}">
+        <a href="{% url 'books:book_list' %}" class="mobile-nav-item {% if request.resolver_match.url_name == 'book_list' or request.resolver_match.url_name == 'book_detail' %}active{% endif %}">
             <i class="fas fa-book"></i>
             <span>Kitablar</span>
         </a>
-        <a href="{% url 'books:category_list' %}" class="mobile-nav-item {% if 'categories' in request.path %}active{% endif %}">
+        <a href="{% url 'books:category_list' %}" class="mobile-nav-item {% if 'category' in request.resolver_match.url_name %}active{% endif %}">
             <i class="fas fa-th-large"></i>
             <span>Bölmələr</span>
         </a>
         {% if request.user.is_authenticated %}
-            <a href="#" class="mobile-nav-item">
+            <a href="{% url 'accounts:login' %}" class="mobile-nav-item {% if request.resolver_match.namespace == 'accounts' %}active{% endif %}">
                 <i class="fas fa-user"></i>
                 <span>Profil</span>
             </a>
         {% else %}
-            <a href="{% url 'accounts:login' %}" class="mobile-nav-item">
+            <a href="{% url 'accounts:login' %}" class="mobile-nav-item {% if request.resolver_match.namespace == 'accounts' %}active{% endif %}">
                 <i class="fas fa-sign-in-alt"></i>
                 <span>Giriş</span>
             </a>
