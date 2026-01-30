@@ -10,21 +10,19 @@ class RegisterView(CreateView):
     model = User
     form_class = UserRegisterForm
     template_name = 'accounts/register.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('books:home')
 
     def form_valid(self, form):
-        # İstifadəçini qeyd et və dərhal giriş etdir
-        response = super().form_valid(form)
-        # Backend sahəsini təyin et və login et
-        self.object.backend = 'django.contrib.auth.backends.ModelBackend'
-        login(self.request, self.object)
-        return response
+        user = form.save()
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
+        login(self.request, user)
+        return redirect(self.get_success_url())
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = Profile
     template_name = 'accounts/profile_edit.html'
     fields = ['bio', 'birth_date', 'preferences']
-    success_url = reverse_lazy('user_profile')
+    success_url = reverse_lazy('books:home')
 
     def get_object(self, queryset=None):
         # Login olan istifadəçinin öz profilini qaytarır

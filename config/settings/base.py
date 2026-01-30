@@ -176,3 +176,8 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
 # Cart settings
 CART_SESSION_ID = 'cart_id'
+
+# Account Settings
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'books:home'
+LOGOUT_REDIRECT_URL = 'books:home'

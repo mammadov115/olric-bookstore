@@ -72,7 +72,18 @@
                         <i class="fas fa-cog"></i>
                     </a>
                     {% endif %}
-                    <a href="#" class="text-gray-600 hover:text-penguin-orange ml-2"><i class="fas fa-user"></i></a>
+                    <div class="flex items-center gap-4">
+                        <a href="#" class="text-gray-600 hover:text-penguin-orange flex items-center gap-2">
+                            <i class="fas fa-user-circle text-lg"></i>
+                            <span class="text-xs font-bold">{{ request.user.first_name|default:request.user.email }}</span>
+                        </a>
+                        <form action="{% url 'accounts:logout' %}" method="post" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" class="text-xs font-black text-red-400 hover:text-red-600 uppercase tracking-tighter transition-all">
+                                <i class="fas fa-sign-out-alt"></i> Çıxış
+                            </button>
+                        </form>
+                    </div>
                 {% else %}
                     <a href="{% url 'accounts:login' %}" class="text-sm font-medium text-penguin-navy hover:text-penguin-orange">Giriş</a>
                 {% endif %}
