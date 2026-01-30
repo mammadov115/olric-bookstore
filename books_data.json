@@ -1,0 +1,1128 @@
+[
+{
+    "model": "books.category",
+    "pk": 1,
+    "fields": {
+        "name": "Bədii ədəbiyyat",
+        "slug": "fiction",
+        "description": "Şəkil böyük ev yeni ev yenidən. Heyvan necə oynamaq. Digər akt hər.\nGetdi bir iş bir azad bildirib ata. Oxumaq bir etmək ehtiyac hər. Müstəqil cür olacaq bildirib dən yeni.",
+        "parent": null,
+        "image": "",
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "books.category",
+    "pk": 2,
+    "fields": {
+        "name": "Dedektiv",
+        "slug": "detective",
+        "description": "Take project always. Receive eight education job these short billion.\nSport fear hit woman nor. Crime democratic get game bar how high.",
+        "parent": null,
+        "image": "",
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "books.category",
+    "pk": 3,
+    "fields": {
+        "name": "Romantik",
+        "slug": "romance",
+        "description": "Son bildirib bu yüksək ata yoxdur. Hətta niyə yenidən dən dəyişiklik yaşamaq böyük. Bir ana bir burada yaxın almaq bir.\nBöyük etmək onların mən belə hər. Izləmək müstəqil son.",
+        "parent": null,
+        "image": "",
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "books.category",
+    "pk": 4,
+    "fields": {
+        "name": "Elmi məşhur",
+        "slug": "science",
+        "description": "Teach attorney hold half participant. South our assume few summer.\nFar worker president data. Year successful bar anything myself entire.",
+        "parent": null,
+        "image": "",
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "books.category",
+    "pk": 5,
+    "fields": {
+        "name": "Biznes",
+        "slug": "business",
+        "description": "Dəst hansı dəyişiklik. Ev yer almaq dəyişiklik çalışmaq son.\nNecə bildirib dünya demək digər hər. Hansı etdi qurmaq izləmək bildirib almaq getdi.",
+        "parent": null,
+        "image": "",
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "books.category",
+    "pk": 6,
+    "fields": {
+        "name": "Uşaq ədəbiyyatı",
+        "slug": "children",
+        "description": "Böyük belə qoymaq dünya. Qurmaq üç əgər isti. Hissə var ata bildirib bu yer heyvan.",
+        "parent": null,
+        "image": "",
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "books.category",
+    "pk": 7,
+    "fields": {
+        "name": "Klassiklər",
+        "slug": "classics",
+        "description": "Loss part voice evening history but movement. Ok page rule affect herself lot. At stop he.\nHair rest skill there now attack. Community each effect reflect worker attack improve.",
+        "parent": null,
+        "image": "",
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "books.category",
+    "pk": 8,
+    "fields": {
+        "name": "Tarixi",
+        "slug": "history",
+        "description": "Yenidən etdi torpaq isti vaxt. Ata harada oxumaq belə yenidən hər. Yenidən port bir sehr.\nIstəyirəm kimi yaşamaq yeni əgər getdi hər. Həyata ev port. Qoymaq etmək həyata onların tərəfindən.",
+        "parent": null,
+        "image": "",
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "books.category",
+    "pk": 9,
+    "fields": {
+        "name": "Müasir Biznes",
+        "slug": "modern-business",
+        "description": "Torpaq ana ana kiçik ev.",
+        "parent": 5,
+        "image": "",
+        "is_active": true,
+        "order": 0
+    }
+},
+{
+    "model": "books.publisher",
+    "pk": 1,
+    "fields": {
+        "name": "Williams-Benjamin",
+        "slug": "williams-benjamin",
+        "website": "http://www.young.com/",
+        "logo": ""
+    }
+},
+{
+    "model": "books.publisher",
+    "pk": 2,
+    "fields": {
+        "name": "Lopez-Hamilton",
+        "slug": "lopez-hamilton",
+        "website": "http://esgerov.biz/",
+        "logo": ""
+    }
+},
+{
+    "model": "books.publisher",
+    "pk": 3,
+    "fields": {
+        "name": "Gilan Holding",
+        "slug": "gilan-holding",
+        "website": "https://www.nelson.com/",
+        "logo": ""
+    }
+},
+{
+    "model": "books.publisher",
+    "pk": 4,
+    "fields": {
+        "name": "Nəzərli QSC",
+        "slug": "nzrli-qsc",
+        "website": "https://rehimov.net/",
+        "logo": ""
+    }
+},
+{
+    "model": "books.publisher",
+    "pk": 5,
+    "fields": {
+        "name": "Velazquez-Sutton",
+        "slug": "velazquez-sutton",
+        "website": "http://bayramov.edu/",
+        "logo": ""
+    }
+},
+{
+    "model": "books.author",
+    "pk": 1,
+    "fields": {
+        "name": "Sara Anarqızı",
+        "slug": "sara-anarqz",
+        "bio": "Probably stuff set above.\nHard everything adult home. Idea lot time wonder growth just.\nType option fund young can central. Area within simple tax for. Send defense single gun.\nHeavy sound simple through collection interesting stand its. Call court poor.\nThem hand Mr dream threat determine possible.\nCollege fund prove. Positive sport population all very provide. Itself low enter step involve decision. One north necessary sort last him very laugh.",
+        "photo": "",
+        "birth_date": null,
+        "nationality": "Makao"
+    }
+},
+{
+    "model": "books.author",
+    "pk": 2,
+    "fields": {
+        "name": "Hümbət Əsgərov",
+        "slug": "humbt-sgrov",
+        "bio": "Yer qurmaq digər quyu ev oxumaq. Torpaq vaxt digər ata hissə böyük.\nNiyə port ana soruşmaq. Niyə nöqtə yoxdur niyə yeni ev bilərsiniz. Üç isti isti kiçik.\nBurada azad oynamaq burada. Böyük yer necə müstəqil dən.\nNiyə vaxt iş torpaq böyük. Üç harada cümlə dəyişiklik ana qoymaq.\nGetdi etmək etmək iş yer. Quyu kimi torpaq azad hətta etdi.\nIstəyirəm çalışmaq var quyu yoxdur etmək. Port necə belə azad niyə olmaq son.\nÇalışmaq əgər izləmək dünya. Onların yer kimi demək torpaq kimi kiçik.",
+        "photo": "",
+        "birth_date": null,
+        "nationality": "Çad"
+    }
+},
+{
+    "model": "books.author",
+    "pk": 3,
+    "fields": {
+        "name": "Mary Harper",
+        "slug": "mary-harper",
+        "bio": "Bu bu oynamaq ehtiyac. Getdi dən torpaq üç azad bilərsiniz. Hissə özü oxumaq istəyirəm kiçik.\nHeyvan qoymaq port hər var sonra. Bir əl yer oynamaq. Bir onların dəyişiklik cümlə hissə.\nLazımdır dəst hava getdi böyük əl akt. Necə cür yoxdur torpaq qoymaq yer. Çalışmaq bildirib torpaq hər.\nBildirib olacaq həyata digər. Torpaq ata soruşmaq cür əlavə böyük yeni bilərsiniz.\nSehr əl əgər qoymaq izləmək əl. Ehtiyac həyata getdi sonra mən heyvan. Dünya mən quyu harada bilərsiniz.",
+        "photo": "",
+        "birth_date": null,
+        "nationality": "Cənubi Sudan"
+    }
+},
+{
+    "model": "books.author",
+    "pk": 4,
+    "fields": {
+        "name": "Angela Fritz",
+        "slug": "angela-fritz",
+        "bio": "Economy hotel necessary prove tree energy. Citizen century strong color school room.\nYet recognize himself large after air read. Speak until down art campaign. Simply hundred store either. Town culture front.\nOutside remember else today writer.\nStudy still gas recently education. Attention six magazine military win. Later yet field land some.\nResponse surface financial health.\nCourse decision current suddenly contain rich. Foot else about foreign. Pretty hand when about security trip five.",
+        "photo": "",
+        "birth_date": null,
+        "nationality": "Saint Lucia"
+    }
+},
+{
+    "model": "books.author",
+    "pk": 5,
+    "fields": {
+        "name": "Marissa Mendoza",
+        "slug": "marissa-mendoza",
+        "bio": "Fire difficult debate view discuss travel pick. Heart tend physical skill talk dog.\nNumber manager live popular leave. Laugh one news hear create yeah. Million rich necessary.\nTreat operation capital year. Address nice likely house hold hour. Like serve television start event change meet.\nTable can money term best. Produce land account. Item almost full.\nSouth material smile write seven family by. Somebody pull never something according her. Only there parent though.",
+        "photo": "",
+        "birth_date": null,
+        "nationality": "Maldiv adaları"
+    }
+},
+{
+    "model": "books.author",
+    "pk": 6,
+    "fields": {
+        "name": "Ryan White",
+        "slug": "ryan-white",
+        "bio": "Cür qurmaq yaxın ehtiyac etmək oynamaq. Cür ev yaşamaq tərəfindən həyata qurmaq torpaq.\nHava torpaq yeni demək yüksək. Lazımdır ev iş hətta digər şəkil mən.\nDəst izləmək ev almaq yaxın. Etmək hansı yenidən yoxdur. Yüksək dəst sehr quyu.\nƏgər onların oynamaq hər. Azad niyə var. Bir isti hissə dəst yenidən sehr ata.\nYüksək çalışmaq getdi onların. Kiçik port lazımdır ata olmaq torpaq qoymaq.\nEv torpaq yaxın oxumaq port. Yaşamaq yoxdur at yaxın bu həyata at. Cür sehr heyvan böyük.",
+        "photo": "",
+        "birth_date": null,
+        "nationality": "Saint Pierre and Miquelon"
+    }
+},
+{
+    "model": "books.author",
+    "pk": 7,
+    "fields": {
+        "name": "Məsmə Şükür",
+        "slug": "msm-sukur",
+        "bio": "In person they. Enjoy soon site war century. Religious mission week outside medical course woman.\nHit into site.\nAllow peace then smile. The boy better event soldier once need. Agreement recent than job take anything. State suddenly politics because yet.\nSuddenly today class state act eye manager. Into paper common compare one.\nAround worker letter front task significant. Rich response example fund significant wrong control. Note capital technology charge foot similar interest late.",
+        "photo": "",
+        "birth_date": null,
+        "nationality": "Botsvana"
+    }
+},
+{
+    "model": "books.author",
+    "pk": 8,
+    "fields": {
+        "name": "Sitarə Əkbər",
+        "slug": "sitar-kbr",
+        "bio": "Mouth candidate only evening wife keep. Friend coach material once claim woman price other. Education a think pretty condition region sell. Site director every traditional nor loss clearly example.\nNumber time I buy accept. Sell down body improve phone open national. Social again test mother father eat.\nNear now trial per thousand music eat. Including young president Republican machine life others.\nControl lawyer economic enter. Key institution wall discover return mission.",
+        "photo": "",
+        "birth_date": null,
+        "nationality": "Peru"
+    }
+},
+{
+    "model": "books.author",
+    "pk": 9,
+    "fields": {
+        "name": "Lawrence Stein",
+        "slug": "lawrence-stein",
+        "bio": "Certain for others whether. Per main country stop gun.\nSide point family visit. Friend decide wall unit.\nOther pretty this property now party. Language myself magazine letter bill.\nIf lose weight reflect production. Group under cup side then own likely.\nSite thank real you mouth. Activity standard our. Water long five.\nFocus collection tree we unit represent son. Southern phone store idea nation. Pass sport worry send beautiful.\nStandard national pass you. Final matter lose view run.",
+        "photo": "",
+        "birth_date": null,
+        "nationality": "Bəhreyn"
+    }
+},
+{
+    "model": "books.author",
+    "pk": 10,
+    "fields": {
+        "name": "Şeyda Rzaquluzadə",
+        "slug": "seyda-rzaquluzad",
+        "bio": "Couple choose eat range learn PM protect into.\nWoman message read weight phone. Crime popular candidate economic power water single. Industry painting miss report action. Not class begin approach process.\nThink option cultural pretty follow. Career until doctor pass structure explain always result. Example anything significant finish mind there.\nRock poor upon three country project. Woman particularly Democrat director player quite get. Sell week miss force reason trip.",
+        "photo": "",
+        "birth_date": null,
+        "nationality": "Burkina"
+    }
+},
+{
+    "model": "books.book",
+    "pk": 1,
+    "fields": {
+        "title": "Establish player rock",
+        "slug": "establish-player-rock-8361",
+        "subtitle": "",
+        "isbn": "9780530152240",
+        "description": "Likely bank ability issue knowledge player. Example out eat care toward young. Management they structure head.",
+        "publisher": 2,
+        "publication_date": "2020-07-21",
+        "language": "en",
+        "pages": 470,
+        "format": "hardcover",
+        "cover_image": "books/covers/cover2_WLF7DBR.png",
+        "price": "46.36",
+        "discount_price": "37.09",
+        "stock": 1,
+        "is_active": true,
+        "is_featured": false,
+        "is_bestseller": true,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:47.490Z",
+        "updated_at": "2026-01-30T12:56:47.590Z",
+        "authors": [
+            8,
+            9
+        ],
+        "categories": [
+            8,
+            6
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 2,
+    "fields": {
+        "title": "Risk staff",
+        "slug": "risk-staff-1143",
+        "subtitle": "",
+        "isbn": "9780782014044",
+        "description": "Bir hava bu böyük kimi. Etmək əl niyə sehr sehr onların. Torpaq digər kiçik. Onların bir almaq. Bilərsiniz üç var bilərsiniz əl hava necə. Azad dəst oxumaq iş oxumaq. Ehtiyac sehr hansı oynamaq.",
+        "publisher": 3,
+        "publication_date": "2023-02-19",
+        "language": "tr",
+        "pages": 210,
+        "format": "ebook",
+        "cover_image": "books/covers/cover5_yJJVu8B.png",
+        "price": "49.07",
+        "discount_price": null,
+        "stock": 28,
+        "is_active": true,
+        "is_featured": true,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:47.606Z",
+        "updated_at": "2026-01-30T12:56:47.678Z",
+        "authors": [
+            7
+        ],
+        "categories": [
+            6
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 3,
+    "fields": {
+        "title": "Yüksək",
+        "slug": "yuksk-2686",
+        "subtitle": "",
+        "isbn": "9780610680656",
+        "description": "Box clear test blood. Chance American night PM nor soldier. Family language walk long. City study professional mention day candidate wish.",
+        "publisher": 3,
+        "publication_date": "2017-06-16",
+        "language": "en",
+        "pages": 332,
+        "format": "hardcover",
+        "cover_image": "books/covers/cover3_07iqi2p.png",
+        "price": "39.76",
+        "discount_price": "31.81",
+        "stock": 14,
+        "is_active": true,
+        "is_featured": true,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:47.693Z",
+        "updated_at": "2026-01-30T12:56:47.778Z",
+        "authors": [
+            4,
+            6
+        ],
+        "categories": [
+            1,
+            3
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 4,
+    "fields": {
+        "title": "Close point party",
+        "slug": "close-point-party-2439",
+        "subtitle": "",
+        "isbn": "9780426159285",
+        "description": "Yüksək isti əlavə hava özü torpaq nöqtə onların. Oxumaq dünya ana müstəqil. Azad at dünya getdi yaxın ata etdi hansı. Ev etmək belə niyə etdi torpaq bir yenidən.",
+        "publisher": 2,
+        "publication_date": "2021-01-14",
+        "language": "tr",
+        "pages": 795,
+        "format": "paperback",
+        "cover_image": "books/covers/cover3_2y92gjZ.png",
+        "price": "24.68",
+        "discount_price": "19.74",
+        "stock": 34,
+        "is_active": true,
+        "is_featured": true,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:47.794Z",
+        "updated_at": "2026-01-30T12:56:47.874Z",
+        "authors": [
+            1,
+            7
+        ],
+        "categories": [
+            3
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 5,
+    "fields": {
+        "title": "Rather try no",
+        "slug": "rather-try-no-9612",
+        "subtitle": "",
+        "isbn": "9780209974647",
+        "description": "Job executive least agency. Anything nation thus sit place. Arrive society face young significant cut price. Collection find behind close light carry have. Management prove majority upon popular live.",
+        "publisher": 2,
+        "publication_date": "2017-06-05",
+        "language": "en",
+        "pages": 662,
+        "format": "paperback",
+        "cover_image": "books/covers/cover3_t876yWg.png",
+        "price": "42.07",
+        "discount_price": null,
+        "stock": 8,
+        "is_active": true,
+        "is_featured": false,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:47.894Z",
+        "updated_at": "2026-01-30T12:56:47.953Z",
+        "authors": [
+            6
+        ],
+        "categories": [
+            4
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 6,
+    "fields": {
+        "title": "Financial its hard maintain option",
+        "slug": "financial-its-hard-maintain-option-3648",
+        "subtitle": "",
+        "isbn": "9781930987791",
+        "description": "What wonder street since official. Feel century voice assume occur. Local enter bag political religious happy. Better third range town. Focus though his reduce at. Begin many better down what authority long.",
+        "publisher": 5,
+        "publication_date": "2024-02-10",
+        "language": "az",
+        "pages": 606,
+        "format": "hardcover",
+        "cover_image": "books/covers/cover4_3XIWuTK.png",
+        "price": "39.13",
+        "discount_price": "31.30",
+        "stock": 1,
+        "is_active": true,
+        "is_featured": false,
+        "is_bestseller": true,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:47.973Z",
+        "updated_at": "2026-01-30T12:56:48.034Z",
+        "authors": [
+            8
+        ],
+        "categories": [
+            6
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 7,
+    "fields": {
+        "title": "At bu yüngül izləmək həyata",
+        "slug": "at-bu-yungul-izlmk-hyata-9084",
+        "subtitle": "",
+        "isbn": "9781459310711",
+        "description": "Kimi özü yer quyu etmək akt burada. Özü yeni ehtiyac. Bildirib getdi bir burada onların.",
+        "publisher": 2,
+        "publication_date": "2016-12-14",
+        "language": "tr",
+        "pages": 439,
+        "format": "ebook",
+        "cover_image": "books/covers/cover1_zS7dvpC.png",
+        "price": "37.62",
+        "discount_price": "30.10",
+        "stock": 33,
+        "is_active": true,
+        "is_featured": true,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:48.055Z",
+        "updated_at": "2026-01-30T12:56:48.150Z",
+        "authors": [
+            2,
+            5
+        ],
+        "categories": [
+            1,
+            8
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 8,
+    "fields": {
+        "title": "Record",
+        "slug": "record-2729",
+        "subtitle": "",
+        "isbn": "9780920516737",
+        "description": "Sign everybody would range drug. If white fear his. Every prepare sort seem soldier away improve.",
+        "publisher": 4,
+        "publication_date": "2024-02-15",
+        "language": "en",
+        "pages": 151,
+        "format": "hardcover",
+        "cover_image": "books/covers/cover4_wgGgWDM.png",
+        "price": "11.37",
+        "discount_price": null,
+        "stock": 40,
+        "is_active": true,
+        "is_featured": true,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:48.172Z",
+        "updated_at": "2026-01-30T12:56:48.247Z",
+        "authors": [
+            1,
+            7
+        ],
+        "categories": [
+            6
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 9,
+    "fields": {
+        "title": "Əlavə yoxdur",
+        "slug": "lav-yoxdur-8787",
+        "subtitle": "",
+        "isbn": "9780029626474",
+        "description": "Nature yard decide present white official. Consumer sign hold guy word color. People indeed result early inside those.",
+        "publisher": 5,
+        "publication_date": "2018-06-27",
+        "language": "az",
+        "pages": 143,
+        "format": "paperback",
+        "cover_image": "books/covers/cover2_5b3PqoP.png",
+        "price": "38.53",
+        "discount_price": null,
+        "stock": 28,
+        "is_active": true,
+        "is_featured": false,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:48.264Z",
+        "updated_at": "2026-01-30T12:56:48.323Z",
+        "authors": [
+            6
+        ],
+        "categories": [
+            3
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 10,
+    "fields": {
+        "title": "Ehtiyac həyata heyvan dən bir",
+        "slug": "ehtiyac-hyata-heyvan-dn-bir-6114",
+        "subtitle": "",
+        "isbn": "9780928118810",
+        "description": "Others man strategy recognize let religious issue. Glass who end little art. Risk respond animal cell small mean easy.",
+        "publisher": 4,
+        "publication_date": "2019-02-25",
+        "language": "tr",
+        "pages": 671,
+        "format": "ebook",
+        "cover_image": "books/covers/cover5_pcKJdSA.png",
+        "price": "17.15",
+        "discount_price": null,
+        "stock": 28,
+        "is_active": true,
+        "is_featured": true,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:48.341Z",
+        "updated_at": "2026-01-30T12:56:48.396Z",
+        "authors": [
+            4
+        ],
+        "categories": [
+            8
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 11,
+    "fields": {
+        "title": "Cümlə oynamaq ata cür oxumaq",
+        "slug": "cuml-oynamaq-ata-cur-oxumaq-5171",
+        "subtitle": "",
+        "isbn": "9780362921519",
+        "description": "Mən dəst dəyişiklik. Heyvan qurmaq yoxdur şəkil cür iş var böyük. Digər soruşmaq bildirib qurmaq özü kimi mən demək. Yüngül bu qoymaq kiçik yer dünya. Demək belə həyata oxumaq yüngül belə olacaq torpaq.",
+        "publisher": 3,
+        "publication_date": "2019-06-18",
+        "language": "az",
+        "pages": 175,
+        "format": "paperback",
+        "cover_image": "books/covers/cover3_gLnLPNQ.png",
+        "price": "8.15",
+        "discount_price": null,
+        "stock": 0,
+        "is_active": true,
+        "is_featured": false,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:48.416Z",
+        "updated_at": "2026-01-30T12:56:48.473Z",
+        "authors": [
+            2
+        ],
+        "categories": [
+            5
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 12,
+    "fields": {
+        "title": "Etdi etdi bir",
+        "slug": "etdi-etdi-bir-5700",
+        "subtitle": "",
+        "isbn": "9780124562936",
+        "description": "Dəyişiklik akt kiçik son bildirib hissə ev. Getdi dünya bir etmək. Olacaq qurmaq port isti kimi vaxt. Port qoymaq yüksək heyvan.",
+        "publisher": 2,
+        "publication_date": "2023-11-14",
+        "language": "az",
+        "pages": 624,
+        "format": "ebook",
+        "cover_image": "books/covers/cover4_5qSAfRn.png",
+        "price": "44.45",
+        "discount_price": "35.56",
+        "stock": 22,
+        "is_active": true,
+        "is_featured": false,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:48.492Z",
+        "updated_at": "2026-01-30T12:56:48.548Z",
+        "authors": [
+            7
+        ],
+        "categories": [
+            4
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 13,
+    "fields": {
+        "title": "Torpaq necə",
+        "slug": "torpaq-nec-8924",
+        "subtitle": "",
+        "isbn": "9780247416604",
+        "description": "Onto brother color behavior on character girl. Play old else agreement ok society very. Raise deal right instead they.",
+        "publisher": 4,
+        "publication_date": "2016-11-12",
+        "language": "az",
+        "pages": 791,
+        "format": "paperback",
+        "cover_image": "books/covers/cover3_Rzc7H1n.png",
+        "price": "6.51",
+        "discount_price": "5.21",
+        "stock": 21,
+        "is_active": true,
+        "is_featured": false,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:48.568Z",
+        "updated_at": "2026-01-30T12:56:48.618Z",
+        "authors": [
+            7
+        ],
+        "categories": [
+            7
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 14,
+    "fields": {
+        "title": "Mən bir",
+        "slug": "mn-bir-5664",
+        "subtitle": "",
+        "isbn": "9781299076068",
+        "description": "Three bag without allow campaign score. Approach side magazine own great those wait five. Price traditional no go beat account. Summer expert city station and man lose.",
+        "publisher": 3,
+        "publication_date": "2021-08-19",
+        "language": "en",
+        "pages": 622,
+        "format": "ebook",
+        "cover_image": "books/covers/cover3_xAx2g4Z.png",
+        "price": "26.97",
+        "discount_price": null,
+        "stock": 0,
+        "is_active": true,
+        "is_featured": false,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:48.634Z",
+        "updated_at": "2026-01-30T12:56:48.694Z",
+        "authors": [
+            2
+        ],
+        "categories": [
+            2
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 15,
+    "fields": {
+        "title": "Audience part doctor",
+        "slug": "audience-part-doctor-8316",
+        "subtitle": "",
+        "isbn": "9780770244828",
+        "description": "Böyük oynamaq yaşamaq hissə böyük hər. Isti kimi heyvan müstəqil almaq quyu yeni hava. Olmaq tərəfindən almaq dünya böyük ehtiyac.",
+        "publisher": 1,
+        "publication_date": "2019-11-20",
+        "language": "en",
+        "pages": 278,
+        "format": "hardcover",
+        "cover_image": "books/covers/cover5_Sp1RJi0.png",
+        "price": "6.39",
+        "discount_price": null,
+        "stock": 16,
+        "is_active": true,
+        "is_featured": false,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:48.714Z",
+        "updated_at": "2026-01-30T12:56:48.814Z",
+        "authors": [
+            3,
+            6
+        ],
+        "categories": [
+            9
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 16,
+    "fields": {
+        "title": "Böyük torpaq harada çalışmaq şəkil",
+        "slug": "boyuk-torpaq-harada-calsmaq-skil-7710",
+        "subtitle": "",
+        "isbn": "9781372122149",
+        "description": "Quite car say military whole quality. Care information down between. Everybody do buy seven without miss. Owner to prevent administration charge answer generation. Choose TV nation drug. Market science speech business difference despite identify.",
+        "publisher": 1,
+        "publication_date": "2025-08-19",
+        "language": "en",
+        "pages": 513,
+        "format": "hardcover",
+        "cover_image": "books/covers/cover4_xfd2oD0.png",
+        "price": "30.73",
+        "discount_price": null,
+        "stock": 22,
+        "is_active": true,
+        "is_featured": false,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:48.835Z",
+        "updated_at": "2026-01-30T12:56:48.894Z",
+        "authors": [
+            10
+        ],
+        "categories": [
+            8
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 17,
+    "fields": {
+        "title": "Var böyük etmək belə bir",
+        "slug": "var-boyuk-etmk-bel-bir-5757",
+        "subtitle": "",
+        "isbn": "9781026159040",
+        "description": "Iş akt yaşamaq. Böyük port çalışmaq mən. Olmaq qoymaq son yeni. Həyata torpaq bir var. Kimi cümlə qurmaq.",
+        "publisher": 3,
+        "publication_date": "2018-04-28",
+        "language": "tr",
+        "pages": 328,
+        "format": "paperback",
+        "cover_image": "books/covers/cover2_LiqFiwl.png",
+        "price": "17.06",
+        "discount_price": "13.65",
+        "stock": 9,
+        "is_active": true,
+        "is_featured": false,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:48.916Z",
+        "updated_at": "2026-01-30T12:56:48.979Z",
+        "authors": [
+            8
+        ],
+        "categories": [
+            2
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 18,
+    "fields": {
+        "title": "Olmaq torpaq ev olacaq",
+        "slug": "olmaq-torpaq-ev-olacaq-8628",
+        "subtitle": "",
+        "isbn": "9780500145333",
+        "description": "Harada azad cür yüngül getdi yenidən isti etmək. Burada yeni almaq digər istəyirəm üç. Sehr bilərsiniz belə bilərsiniz çalışmaq niyə şəkil. Nöqtə olacaq akt cür. Torpaq bir həyata bir bu yenidən var yaşamaq.",
+        "publisher": 5,
+        "publication_date": "2016-04-08",
+        "language": "az",
+        "pages": 752,
+        "format": "ebook",
+        "cover_image": "books/covers/cover4_mTaGYz2.png",
+        "price": "45.66",
+        "discount_price": null,
+        "stock": 24,
+        "is_active": true,
+        "is_featured": true,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:48.997Z",
+        "updated_at": "2026-01-30T12:56:49.457Z",
+        "authors": [
+            1
+        ],
+        "categories": [
+            1
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 19,
+    "fields": {
+        "title": "Tərəfindən",
+        "slug": "trfindn-7525",
+        "subtitle": "",
+        "isbn": "9781642878431",
+        "description": "Son hissə son bildirib əl. Harada soruşmaq heyvan sehr. Dünya yer hissə müstəqil yenidən hər.",
+        "publisher": 3,
+        "publication_date": "2017-01-17",
+        "language": "az",
+        "pages": 388,
+        "format": "paperback",
+        "cover_image": "books/covers/cover5_9kJwYVP.png",
+        "price": "44.78",
+        "discount_price": null,
+        "stock": 37,
+        "is_active": true,
+        "is_featured": true,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:49.479Z",
+        "updated_at": "2026-01-30T12:56:49.538Z",
+        "authors": [
+            4
+        ],
+        "categories": [
+            9
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 20,
+    "fields": {
+        "title": "Niyə müstəqil",
+        "slug": "niy-mustqil-7685",
+        "subtitle": "",
+        "isbn": "9781035327409",
+        "description": "Reflect consumer beyond vote follow focus. Information institution theory military. Interview sport many probably.",
+        "publisher": 3,
+        "publication_date": "2018-06-16",
+        "language": "tr",
+        "pages": 466,
+        "format": "hardcover",
+        "cover_image": "books/covers/cover1_a4ds1nm.png",
+        "price": "46.31",
+        "discount_price": "37.05",
+        "stock": 39,
+        "is_active": true,
+        "is_featured": false,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:49.558Z",
+        "updated_at": "2026-01-30T12:56:49.630Z",
+        "authors": [
+            4,
+            8
+        ],
+        "categories": [
+            8
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 21,
+    "fields": {
+        "title": "Soruşmaq yüksək",
+        "slug": "sorusmaq-yuksk-8480",
+        "subtitle": "",
+        "isbn": "9780584658095",
+        "description": "Oynamaq dəst soruşmaq isti ana. Lazımdır azad hər izləmək demək qoymaq kiçik. Həyata digər ev var bildirib. Digər hər bildirib etmək müstəqil vaxt mən. Dünya dünya sonra etdi əl qoymaq.",
+        "publisher": 5,
+        "publication_date": "2021-09-11",
+        "language": "en",
+        "pages": 150,
+        "format": "paperback",
+        "cover_image": "books/covers/cover3_UyrjKur.png",
+        "price": "41.95",
+        "discount_price": null,
+        "stock": 31,
+        "is_active": true,
+        "is_featured": true,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:49.647Z",
+        "updated_at": "2026-01-30T12:56:49.704Z",
+        "authors": [
+            4
+        ],
+        "categories": [
+            4
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 22,
+    "fields": {
+        "title": "Field million",
+        "slug": "field-million-5285",
+        "subtitle": "",
+        "isbn": "9781427522535",
+        "description": "Local him officer tell happy respond new federal. Seven treat president opportunity. Strong begin Mr at bar.",
+        "publisher": 5,
+        "publication_date": "2023-02-08",
+        "language": "en",
+        "pages": 627,
+        "format": "ebook",
+        "cover_image": "books/covers/cover1_p95HKTs.png",
+        "price": "29.18",
+        "discount_price": null,
+        "stock": 0,
+        "is_active": true,
+        "is_featured": true,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:49.721Z",
+        "updated_at": "2026-01-30T12:56:49.793Z",
+        "authors": [
+            1,
+            3
+        ],
+        "categories": [
+            9
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 23,
+    "fields": {
+        "title": "Bring build develop bit recent",
+        "slug": "bring-build-develop-bit-recent-9039",
+        "subtitle": "",
+        "isbn": "9780902718463",
+        "description": "Hava torpaq hər harada burada kiçik. Üç əgər hansı həyata sehr oynamaq oxumaq. Cümlə son müstəqil yoxdur bildirib. Dəst harada hansı ehtiyac hər port. Lazımdır vaxt etmək dəyişiklik oxumaq hissə hissə onların.",
+        "publisher": 1,
+        "publication_date": "2024-10-05",
+        "language": "en",
+        "pages": 547,
+        "format": "ebook",
+        "cover_image": "books/covers/cover4_jFudtsT.png",
+        "price": "17.32",
+        "discount_price": null,
+        "stock": 47,
+        "is_active": true,
+        "is_featured": true,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:49.815Z",
+        "updated_at": "2026-01-30T12:56:49.893Z",
+        "authors": [
+            4,
+            7
+        ],
+        "categories": [
+            4
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 24,
+    "fields": {
+        "title": "Ev necə istəyirəm tərəfindən böyük",
+        "slug": "ev-nec-istyirm-trfindn-boyuk-4704",
+        "subtitle": "",
+        "isbn": "9780309929417",
+        "description": "Represent white PM computer. Test role no. Fast decision design help. Standard something before whose sell four.",
+        "publisher": 4,
+        "publication_date": "2025-02-17",
+        "language": "az",
+        "pages": 589,
+        "format": "paperback",
+        "cover_image": "books/covers/cover4_wqfTKvN.png",
+        "price": "36.01",
+        "discount_price": null,
+        "stock": 4,
+        "is_active": true,
+        "is_featured": false,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:49.915Z",
+        "updated_at": "2026-01-30T12:56:50.009Z",
+        "authors": [
+            1,
+            6
+        ],
+        "categories": [
+            2,
+            3
+        ]
+    }
+},
+{
+    "model": "books.book",
+    "pk": 25,
+    "fields": {
+        "title": "Hər çalışmaq bildirib",
+        "slug": "hr-calsmaq-bildirib-9182",
+        "subtitle": "",
+        "isbn": "9780613098120",
+        "description": "Özü port özü cür iş. Dəyişiklik bir lazımdır demək bir əgər yaxın almaq. Bir əgər izləmək var ev torpaq. Etmək hissə bir bir.",
+        "publisher": 1,
+        "publication_date": "2021-04-01",
+        "language": "tr",
+        "pages": 662,
+        "format": "paperback",
+        "cover_image": "books/covers/cover1_5g9hdSq.png",
+        "price": "41.24",
+        "discount_price": null,
+        "stock": 33,
+        "is_active": true,
+        "is_featured": false,
+        "is_bestseller": false,
+        "views_count": 0,
+        "sales_count": 0,
+        "created_at": "2026-01-30T12:56:50.028Z",
+        "updated_at": "2026-01-30T12:56:50.087Z",
+        "authors": [
+            8
+        ],
+        "categories": [
+            9
+        ]
+    }
+}
+]
