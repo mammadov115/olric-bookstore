@@ -4,52 +4,53 @@
 {% block title %}Qeydiyyat | Olric Bookstore{% endblock %}
 
 {% block content %}
-<div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
-        <div class="text-center">
-            <h2 class="text-3xl font-extrabold text-penguin-navy">Hesab Yaradın</h2>
-            <p class="mt-2 text-sm text-gray-600">Kitab dolu dünyaya addım atın</p>
+<div class="flex items-center justify-center min-h-[70vh] py-8 md:py-12">
+    <div class="card max-w-md w-full animate-slide-up">
+        <div class="text-center mb-8">
+            <h2 class="text-2xl md:text-3xl font-black text-secondary">Hesab Yaradın</h2>
+            <p class="mt-2 text-sm text-gray-500">Kitab dolu dünyaya addım atın</p>
         </div>
         
-        <form class="mt-8 space-y-5" method="POST">
+        <form class="space-y-6" method="POST">
             {% csrf_token %}
 
             {% if form.non_field_errors %}
-                <div class="bg-red-50 text-red-600 p-3 rounded-lg text-sm font-medium">
+                <div class="bg-red-50 text-red-600 p-4 rounded-xl text-sm font-semibold border border-red-100 mb-4">
                     {% for error in form.non_field_errors %}
                         {{ error }}
                     {% endfor %}
                 </div>
             {% endif %}
-            {% for field in form %}
-            <div>
-                <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-penguin-navy mb-1">
-                    {{ field.label }}
-                </label>
-                {% render_field field class="appearance-none block w-full px-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-penguin-orange focus:border-penguin-orange sm:text-sm transition duration-200" placeholder=field.label %}
-                
-                {% if field.errors %}
-                    {% for error in field.errors %}
-                        <p class="mt-1 text-xs text-red-600 font-medium">{{ error }}</p>
-                    {% endfor %}
-                {% endif %}
-            </div>
-            {% endfor %}
 
-            <div>
-                <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-lg text-white bg-penguin-navy hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-penguin-navy transition duration-300">
-                    <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-                        <i class="fas fa-user-plus text-penguin-orange"></i>
-                    </span>
-                    Qeydiyyatı Tamamla
-                </button>
+            <div class="space-y-4">
+                {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}" class="form-label">
+                        {{ field.label }}
+                    </label>
+                    {% render_field field class="form-input" placeholder=field.label %}
+                    
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                            <p class="mt-1 text-xs text-error font-semibold">{{ error }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                {% endfor %}
             </div>
+
+            <button type="submit" class="btn btn-secondary w-full py-4 text-base shadow-xl relative overflow-hidden group">
+                <span class="relative z-10 flex items-center justify-center gap-2">
+                    <i class="fas fa-user-plus text-primary transition-transform group-hover:scale-110"></i>
+                    Qeydiyyatı Tamamla
+                </span>
+            </button>
         </form>
 
-        <div class="text-center mt-4">
-            <p class="text-sm text-gray-600">
+        <div class="text-center mt-8 pt-6 border-t border-gray-100">
+            <p class="text-sm text-gray-500">
                 Artıq hesabınız var? 
-                <a href="{% url 'accounts:login' %}" class="font-bold text-penguin-orange hover:text-opacity-80 transition">Giriş edin</a>
+                <a href="{% url 'accounts:login' %}" class="font-black text-primary hover:text-primary-dark transition underline decoration-secondary decoration-2 underline-offset-4">Giriş edin</a>
             </p>
         </div>
     </div>

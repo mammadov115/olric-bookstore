@@ -29,66 +29,100 @@
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- Custom CSS (optional) -->
-    {%comment %}<link rel="stylesheet" href="{% static 'css/custom.css' %}">{%endcomment %}
+    <!-- Custom Design System -->
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
 </head>
-<body class="bg-gray-50 flex flex-col min-h-screen">
+<body class="bg-gray-50 flex flex-col min-h-screen pb-20 md:pb-0">
     <!-- Navbar -->
-    <nav class="bg-white shadow">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="/" class="text-2xl font-bold text-penguin-navy">Olric<span class="text-penguin-orange">Books</span></a>
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-[90] border-b border-gray-100">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center h-16 md:h-20">
+            <a href="/" class="text-xl md:text-2xl font-black text-penguin-navy flex items-center gap-2">
+                <span class="w-8 h-8 md:w-10 md:h-10 bg-primary rounded-xl flex items-center justify-center rotate-3 shadow-lg">
+                    <i class="fas fa-book-open text-white text-sm md:text-base"></i>
+                </span>
+                <span>Olric<span class="text-primary">Books</span></span>
+            </a>
             
-            <div class="hidden md:flex space-x-6">
-                <a href="{% url 'books:book_list' %}" class="text-gray-600 hover:text-penguin-orange transition">Kitablar</a>
-                <a href="{% url 'books:category_list' %}" class="text-gray-600 hover:text-penguin-orange transition">Kateqoriyalar</a>
-                <a href="#" class="text-gray-600 hover:text-penguin-orange transition">Endirimlər</a>
+            <div class="hidden md:flex space-x-8">
+                <a href="{% url 'books:book_list' %}" class="nav-link">Kitablar</a>
+                <a href="{% url 'books:category_list' %}" class="nav-link">Kateqoriyalar</a>
+                <a href="#" class="nav-link text-red-500 font-bold">Endirimlər</a>
             </div>
 
-            <div class="flex items-center space-x-4">
-                <a href="{% url 'books:book_list' %}" class="text-gray-600 hover:text-penguin-orange"><i class="fas fa-search"></i></a>
-                <a href="#" class="text-gray-600 hover:text-penguin-orange"><i class="fas fa-heart"></i></a>
+            <div class="flex items-center space-x-3 md:space-x-6">
+                <!-- Search Icon (Mobile) -->
+                <a href="{% url 'books:book_list' %}" class="w-10 h-10 flex items-center justify-center rounded-full text-gray-600 hover:bg-gray-100 transition md:hidden">
+                    <i class="fas fa-search text-lg"></i>
+                </a>
+
                 <div class="relative group">
-                    <a href="{% url 'cart:cart_detail' %}" class="text-gray-600 hover:text-penguin-orange h-10 w-10 flex items-center justify-center rounded-full hover:bg-gray-50 transition relative">
-                        <i class="fas fa-shopping-cart"></i>
+                    <a href="{% url 'cart:cart_detail' %}" class="text-gray-600 hover:text-primary h-10 w-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition relative">
+                        <i class="fas fa-shopping-cart text-lg"></i>
                         {% if cart.get_total_items > 0 %}
-                        <span class="navbar-cart-count absolute -top-1 -right-1 bg-penguin-orange text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full group-hover:scale-110 transition">
+                        <span class="navbar-cart-count absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full group-hover:scale-110 transition">
                             {{ cart.get_total_items }}
                         </span>
                         {% endif %}
                     </a>
                     
-                    <!-- Floating Cart Summary -->
-                    <div id="mini-cart-container">
+                    <!-- Floating Cart Summary - Hidden on mobile for better UX -->
+                    <div id="mini-cart-container" class="hidden md:block">
                         {% include 'cart/includes/mini_cart.html' %}
                     </div>
                 </div>
                 
                 {% if request.user.is_authenticated %}
-                    {% if request.user.is_staff %}
-                    <a href="{% url 'dashboard:index' %}" class="px-4 py-2 bg-penguin-navy text-white rounded-xl text-xs font-bold hover:bg-penguin-orange transition-all shadow-lg shadow-penguin-navy/10 flex items-center gap-2">
-                        <i class="fas fa-chart-line"></i> Dashboard
-                    </a>
-                    <a href="{% url 'admin:index' %}" class="text-penguin-navy/30 hover:text-penguin-orange font-bold text-sm" title="Default Admin">
-                        <i class="fas fa-cog"></i>
-                    </a>
-                    {% endif %}
-                    <div class="flex items-center gap-4">
-                        <a href="#" class="text-gray-600 hover:text-penguin-orange flex items-center gap-2">
-                            <i class="fas fa-user-circle text-lg"></i>
-                            <span class="text-xs font-bold">{{ request.user.first_name|default:request.user.email }}</span>
+                    <div class="hidden md:flex items-center gap-4">
+                        {% if request.user.is_staff %}
+                        <a href="{% url 'dashboard:index' %}" class="btn-secondary px-4 py-2 rounded-xl text-xs font-bold hover:scale-105 transition-all shadow-lg shadow-secondary/10 flex items-center gap-2">
+                            <i class="fas fa-chart-line"></i> Dashboard
                         </a>
+                        {% endif %}
+                        <div class="flex items-center gap-3 bg-gray-50 p-1.5 pr-4 rounded-full border border-gray-100">
+                            <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-xs">
+                                {{ request.user.first_name|first|default:request.user.email|first }}
+                            </div>
+                            <span class="text-xs font-bold text-secondary">{{ request.user.first_name|default:request.user.email }}</span>
+                        </div>
                         <form action="{% url 'accounts:logout' %}" method="post" class="inline">
                             {% csrf_token %}
                             <button type="submit" class="text-xs font-black text-red-400 hover:text-red-600 uppercase tracking-tighter transition-all">
-                                <i class="fas fa-sign-out-alt"></i> Çıxış
+                                <i class="fas fa-sign-out-alt"></i>
                             </button>
                         </form>
                     </div>
                 {% else %}
-                    <a href="{% url 'accounts:login' %}" class="text-sm font-medium text-penguin-navy hover:text-penguin-orange">Giriş</a>
+                    <a href="{% url 'accounts:login' %}" class="hidden md:flex btn-primary px-6 py-2  rounded-xl text-sm font-bold shadow-lg">Giriş</a>
                 {% endif %}
             </div>
         </div>
+    </nav>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-nav">
+        <a href="/" class="mobile-nav-item {% if request.path == '/' %}active{% endif %}">
+            <i class="fas fa-home"></i>
+            <span>Ana Səhifə</span>
+        </a>
+        <a href="{% url 'books:book_list' %}" class="mobile-nav-item {% if 'books' in request.path %}active{% endif %}">
+            <i class="fas fa-book"></i>
+            <span>Kitablar</span>
+        </a>
+        <a href="{% url 'books:category_list' %}" class="mobile-nav-item {% if 'categories' in request.path %}active{% endif %}">
+            <i class="fas fa-th-large"></i>
+            <span>Bölmələr</span>
+        </a>
+        {% if request.user.is_authenticated %}
+            <a href="#" class="mobile-nav-item">
+                <i class="fas fa-user"></i>
+                <span>Profil</span>
+            </a>
+        {% else %}
+            <a href="{% url 'accounts:login' %}" class="mobile-nav-item">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>Giriş</span>
+            </a>
+        {% endif %}
     </nav>
 
     <!-- Content -->
@@ -194,12 +228,12 @@
         });
 
         function updateNavbarCart(count) {
-            let container = $('.relative.group > a.text-gray-600'); // Navbar cart anchor
+            let container = $('.relative.group > a'); // Navbar cart anchor
             let counter = $('.navbar-cart-count');
             
             if (counter.length === 0 && count > 0) {
                 // Manually inject counter if it didn't exist (empty cart state)
-                container.append(`<span class="navbar-cart-count absolute -top-1 -right-1 bg-penguin-orange text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full group-hover:scale-110 transition scale-0 animate-bounce">
+                container.append(`<span class="navbar-cart-count absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full group-hover:scale-110 transition scale-0 animate-bounce">
                     ${count}
                 </span>`);
                 setTimeout(() => $('.navbar-cart-count').removeClass('scale-0'), 10);
@@ -212,7 +246,7 @@
 
         function showToast(message, type = 'success') {
             const id = Date.now();
-            const bg = type === 'success' ? 'bg-penguin-navy' : 'bg-red-500';
+            const bg = type === 'success' ? 'bg-secondary' : 'bg-red-500';
             const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
             
             const toast = `
