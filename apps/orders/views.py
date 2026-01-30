@@ -1,0 +1,62 @@
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from apps.cart.cart import CartService
+from .models import Order, OrderItem
+from .forms import OrderCreateForm
+
+def order_create(request):
+    cart = CartService(request)
+    if cart.get_total_items() == 0:
+        return redirect('cart:cart_detail')
+
+    if request.method == 'POST':
+        form = OrderCreateForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            if request.user.is_authenticated:
+                order.user = request.user
+            
+            # Pricing logic
+            from decimal import Decimal
+            order.subtotal = cart.get_total_price()
+            order.total_amount = order.subtotal + Decimal(order.shipping_cost) - Decimal(order.discount_amount)
+            order.save()
+
+            # Create Order Items (Snapshots)
+            for item in cart:
+                OrderItem.objects.create(
+                    order=order,
+                    book=item.book,
+                    book_title=item.book.title,
+                    price=item.book.final_price,
+                    quantity=item.quantity
+                )
+            
+            # Clear the cart after order
+            cart.clear()
+            
+            return render(request, 'orders/order_success.html', {'order': order})
+    else:
+        # Pre-fill with user info if authenticated
+        initial_data = {}
+        if request.user.is_authenticated:
+            initial_data = {
+                'full_name': f"{request.user.first_name} {request.user.last_name}".strip(),
+                'email': request.user.email,
+            }
+        form = OrderCreateForm(initial=initial_data)
+
+    return render(request, 'orders/order_create.html', {
+        'cart': cart, 
+        'form': form
+    })
+
+@login_required
+def order_list(request):
+    orders = request.user.orders.all()
+    return render(request, 'orders/order_list.html', {'orders': orders})
+
+@login_required
+def order_detail(request, order_number):
+    order = get_object_or_404(Order, order_number=order_number, user=request.user)
+    return render(request, 'orders/order_detail.html', {'order': order})

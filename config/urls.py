@@ -15,7 +15,7 @@ urlpatterns = [
     path('accounts/', include('apps.accounts.urls')),
     path('books/', include('apps.books.urls')),
     path('cart/', include('apps.cart.urls')),
-    # path('orders/', include('apps.orders.urls')),
+    path('orders/', include('apps.orders.urls')),
 ]
 
 # Serve media files in development

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Sifarişlərim | Olric Bookstore{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto mb-12">
+    <div class="flex items-center justify-between mb-8">
+        <a href="{% url 'accounts:profile_edit' %}" class="text-gray-400 hover:text-penguin-navy transition">
+            <i class="fas fa-arrow-left mr-2"></i> Profilə qayıt
+        </a>
+    </div>
+
+    {% if orders %}
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+        <table class="w-full text-left">
+            <thead class="bg-gray-50 border-b border-gray-100">
+                <tr>
+                    <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Sifariş #</th>
+                    <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Tarix</th>
+                    <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Məbləğ</th>
+                    <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider"></th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                {% for order in orders %}
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-6 py-6 font-bold text-penguin-navy">
+                        {{ order.order_number }}
+                    </td>
+                    <td class="px-6 py-6 text-sm text-gray-600">
+                        {{ order.created_at|date:"d.m.Y H:i" }}
+                    </td>
+                    <td class="px-6 py-6">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold 
+                        {% if order.status == 'pending' %}bg-yellow-100 text-yellow-700
+                        {% elif order.status == 'confirmed' %}bg-blue-100 text-blue-700
+                        {% elif order.status == 'shipped' %}bg-purple-100 text-purple-700
+                        {% elif order.status == 'delivered' %}bg-green-100 text-green-700
+                        {% else %}bg-gray-100 text-gray-700{% endif %}">
+                            {{ order.get_status_display }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-6 font-bold text-gray-700">
+                        {{ order.total_amount }} AZN
+                    </td>
+                    <td class="px-6 py-6 text-right">
+                        <a href="{% url 'orders:order_detail' order.order_number %}" class="text-penguin-orange font-bold text-sm hover:underline">
+                            Ətraflı <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="bg-white p-20 rounded-3xl text-center border border-dashed border-gray-300">
+        <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-300 text-3xl">
+            <i class="fas fa-box-open"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-penguin-navy mb-2">Sifarişiniz yoxdur</h2>
+        <p class="text-gray-500 mb-8">Burada keçmiş sifarişləriniz görünəcək.</p>
+        <a href="{% url 'books:book_list' %}" class="bg-penguin-navy text-white px-8 py-3 rounded-full font-bold hover:bg-penguin-orange transition shadow-lg inline-block">
+            Alış-verişə başla
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

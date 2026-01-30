@@ -69,7 +69,7 @@ This document serves as the primary tracking mechanism for the development of Ol
 ## 💳 5. Orders & Financial Fulfillment (Orders & Payments)
 *Recording transactions and processing secure payments.*
 
-- [ ] **Order Management Engine**
+- [x] **Order Management Engine**
     - **Models:** `Order`, `OrderItem` (capturing price snapshots at time of purchase).
     - **Visual/Functional Result:** Permanent order history for users and an administration dashboard for fulfillment.
 - [ ] **MilliPAY Integration**

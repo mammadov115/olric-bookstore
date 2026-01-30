@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}Sifarişi Tamamla | Olric Bookstore{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto mb-12">
+    <div class="text-center mb-10">
+        <h1 class="text-3xl font-extrabold text-penguin-navy mb-2">Sifarişi Tamamla</h1>
+        <p class="text-gray-400">Çatdırılma məlumatlarını daxil edin və sifarişinizi təsdiqləyin.</p>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-12">
+        <!-- Checkout Form -->
+        <div class="lg:w-2/3">
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                <h2 class="text-xl font-bold text-penguin-navy mb-6 flex items-center">
+                    <span class="w-8 h-8 rounded-full bg-penguin-orange text-white flex items-center justify-center text-sm mr-3">1</span>
+                    Çatdırılma Məlumatları
+                </h2>
+                
+                <form method="post" id="checkout-form">
+                    {% csrf_token %}
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Ad və Soyad</label>
+                            {{ form.full_name }}
+                            {{ form.full_name.errors }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Email</label>
+                            {{ form.email }}
+                            {{ form.email.errors }}
+                        </div>
+                    </div>
+
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Telefon</label>
+                            {{ form.phone }}
+                            {{ form.phone.errors }}
+                        </div>
+                         <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Şəhər</label>
+                            {{ form.city }}
+                            {{ form.city.errors }}
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Ünvan</label>
+                        {{ form.address }}
+                        {{ form.address.errors }}
+                    </div>
+
+                     <div class="mb-6">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Post İndeksi (istəyə bağlı)</label>
+                         {{ form.postal_code }}
+                         {{ form.postal_code.errors }}
+                    </div>
+
+                    <div class="mb-8">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Qeydlər</label>
+                        {{ form.customer_notes }}
+                        {{ form.customer_notes.errors }}
+                    </div>
+
+                    <h2 class="text-xl font-bold text-penguin-navy mb-6 flex items-center pt-6 border-t border-gray-100">
+                        <span class="w-8 h-8 rounded-full bg-penguin-orange text-white flex items-center justify-center text-sm mr-3">2</span>
+                        Ödəniş Üsulu
+                    </h2>
+
+                    <div class="space-y-4 mb-8">
+                       {{ form.payment_method }}
+                       {{ form.payment_method.errors }}
+                    </div>
+
+                    <button type="submit" class="w-full bg-penguin-navy text-white text-lg font-bold py-5 rounded-2xl hover:bg-penguin-orange transition transform hover:scale-[1.01] shadow-xl flex items-center justify-center">
+                        <i class="fas fa-check-circle mr-3"></i> Sifarişi Təsdiqlə
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <aside class="lg:w-1/3">
+            <div class="bg-gray-50 p-8 rounded-3xl sticky top-8 border border-gray-200">
+                <h3 class="font-bold text-penguin-navy text-lg mb-6">Sifarişiniz üzrə</h3>
+                
+                <div class="space-y-4 max-h-96 overflow-y-auto pr-2 custom-scrollbar mb-6">
+                    {% for item in cart %}
+                    <div class="flex gap-4">
+                        <div class="w-16 h-20 bg-white rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
+                             {% if item.book.cover_image %}
+                            <img src="{{ item.book.cover_image.url }}" class="w-full h-full object-cover">
+                            {% else %}
+                             <div class="w-full h-full flex items-center justify-center text-gray-300">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="flex-grow">
+                            <h4 class="text-sm font-bold text-penguin-navy line-clamp-2">{{ item.book.title }}</h4>
+                            <div class="flex justify-between items-center mt-2 text-xs">
+                                <span class="text-gray-500">{{ item.quantity }} x {{ item.book.final_price }}</span>
+                                <span class="font-bold text-penguin-orange">{{ item.subtotal }} AZN</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="border-t border-gray-200 pt-4 space-y-3 text-sm">
+                    <div class="flex justify-between text-gray-500">
+                        <span>Cəm</span>
+                        <span>{{ cart.get_total_price }} AZN</span>
+                    </div>
+                    <div class="flex justify-between text-gray-500">
+                        <span>Çatdırılma</span>
+                        <span class="text-green-600 font-bold">Pulsuz</span>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-200 pt-4 mt-4">
+                    <div class="flex justify-between items-end">
+                        <span class="font-bold text-gray-700">Yekun Məbləğ</span>
+                        <span class="text-2xl font-black text-penguin-navy">{{ cart.get_total_price }} AZN</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}
