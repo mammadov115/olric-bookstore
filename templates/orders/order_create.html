@@ -92,7 +92,7 @@
                                {% for radio in form.payment_method %}
                                <label class="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-100 cursor-pointer transition-all hover:border-primary group">
                                    <div class="relative flex items-center">
-                                       {% render_field radio.tag class="hidden peer" %}
+                                       {{ radio.tag }}
                                        <div class="w-6 h-6 border-2 border-gray-200 rounded-full peer-checked:border-primary flex items-center justify-center transition-all">
                                            <div class="w-2.5 h-2.5 bg-primary rounded-full opacity-0 peer-checked:opacity-100 scale-50 peer-checked:scale-100 transition-all"></div>
                                        </div>

@@ -39,7 +39,5 @@ class OrderCreateForm(forms.ModelForm):
                 'rows': 2,
                 'class': 'w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-penguin-orange'
             }),
-            'payment_method': forms.Select(attrs={
-                'class': 'w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-penguin-orange appearance-none'
-            })
+            'payment_method': forms.RadioSelect(attrs={'class': 'hidden peer'})
         }
