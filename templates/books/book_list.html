@@ -9,155 +9,211 @@
     <!-- Sidebar: Categories -->
     <aside class="md:w-1/4">
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 sticky top-8">
-            <h2 class="text-xl font-bold text-penguin-navy mb-6">Kateqoriyalar</h2>
-            <ul class="space-y-3">
-                <li>
-                    <a href="{% url 'books:book_list' %}" class="block py-2 px-4 rounded-lg {% if not current_category %}bg-penguin-orange text-white font-bold shadow-md{% else %}text-gray-600 hover:bg-gray-50 hover:text-penguin-orange transition{% endif %}">
-                        Hamısı
-                    </a>
-                </li>
-                {% for cat in all_categories %}
-                <li>
-                    <a href="{% url 'books:category_books' cat.slug %}" class="block py-2 px-4 rounded-lg {% if current_category.id == cat.id %}bg-penguin-navy text-white font-bold shadow-md{% else %}text-gray-600 hover:bg-gray-50 hover:text-penguin-navy transition{% endif %}">
-                        {{ cat.name }}
-                    </a>
-                    {% if cat.children.exists %}
-                    <ul class="ml-4 mt-2 space-y-2 border-l-2 border-gray-100 pl-4">
-                        {% for sub in cat.children.all %}
+            <h2 class="text-xl font-bold text-penguin-navy mb-6">Filterlər</h2>
+            
+            <form action="." method="get" class="space-y-8">
+                <!-- Search (Included in sidebar for convenience) -->
+                <div>
+                    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Axtarış</h3>
+                    <div class="relative">
+                        <input name="q" value="{{ search_query }}" type="text" placeholder="Kitab adı, müəllif..." class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-penguin-orange focus:border-transparent transition">
+                        <button type="submit" class="absolute right-3 top-3 text-gray-400 hover:text-penguin-orange">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Categories -->
+                <div>
+                    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Kateqoriyalar</h3>
+                    
+                    <!-- New: Category Search/Filter -->
+                    <div class="relative mb-4">
+                        <input type="text" id="cat-search" placeholder="Kateqoriya axtar..." class="w-full bg-gray-50 border border-gray-100 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-penguin-orange">
+                    </div>
+
+                    <ul id="categories-list" class="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
                         <li>
-                            <a href="{% url 'books:category_books' sub.slug %}" class="text-sm {% if current_category.id == sub.id %}text-penguin-orange font-bold{% else %}text-gray-500 hover:text-penguin-orange transition{% endif %}">
-                                {{ sub.name }}
+                            <a href="{% url 'books:book_list' %}" class="ajax-filter-link block py-2 px-4 rounded-lg {% if not current_category %}bg-penguin-orange text-white font-bold shadow-md{% else %}text-gray-600 hover:bg-gray-50 hover:text-penguin-orange transition{% endif %}">
+                                Hamısı
+                            </a>
+                        </li>
+                        {% for cat in all_categories %}
+                        <li class="cat-item">
+                            <a href="{% url 'books:category_books' cat.slug %}" class="ajax-filter-link block py-2 px-4 rounded-lg {% if current_category.id == cat.id %}bg-penguin-navy text-white font-bold shadow-md{% else %}text-gray-600 hover:bg-gray-50 hover:text-penguin-navy transition{% endif %}" data-name="{{ cat.name|lower }}">
+                                {{ cat.name }}
                             </a>
                         </li>
                         {% endfor %}
                     </ul>
-                    {% endif %}
-                </li>
-                {% endfor %}
-            </ul>
+                </div>
+
+                <!-- Price Range -->
+                <div>
+                    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Qiymət Aralığı</h3>
+                    <div class="flex items-center space-x-2">
+                        <input name="min_price" value="{{ active_min_price }}" type="number" placeholder="Min" class="w-1/2 bg-gray-50 border border-gray-100 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-penguin-orange">
+                        <span class="text-gray-300">-</span>
+                        <input name="max_price" value="{{ active_max_price }}" type="number" placeholder="Max" class="w-1/2 bg-gray-50 border border-gray-100 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-penguin-orange">
+                    </div>
+                </div>
+
+                <!-- Format -->
+                <div>
+                    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Format</h3>
+                    <div class="space-y-2">
+                        {% for value, label in formats %}
+                        <label class="flex items-center group cursor-pointer">
+                            <input type="radio" name="format" value="{{ value }}" {% if active_format == value %}checked{% endif %} class="hidden peer">
+                            <div class="w-5 h-5 border-2 border-gray-200 rounded-md mr-3 peer-checked:bg-penguin-orange peer-checked:border-penguin-orange transition flex items-center justify-center">
+                                <i class="fas fa-check text-[10px] text-white opacity-0 peer-checked:opacity-100"></i>
+                            </div>
+                            <span class="text-gray-600 group-hover:text-penguin-navy transition">{{ label }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Authors -->
+                <div>
+                    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Yazıçılar</h3>
+                    <select name="author" class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-penguin-orange appearance-none">
+                        <option value="">Bütün yazıçılar</option>
+                        {% for author in authors %}
+                        <option value="{{ author.id }}" {% if active_author == author.id|stringformat:"i" %}selected{% endif %}>{{ author.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full bg-penguin-navy text-white py-4 rounded-xl font-bold hover:bg-penguin-orange transition shadow-lg">
+                        Filtrləri Tətbiq Et
+                    </button>
+                    <a href="." class="block text-center text-xs text-gray-400 mt-4 hover:text-red-500 transition">Filtrləri təmizlə</a>
+                </div>
+            </form>
         </div>
     </aside>
 
     <!-- Main Content: Book Grid -->
     <div class="md:w-3/4">
-        <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-            <h1 class="text-3xl font-extrabold text-penguin-navy">
-                {% if current_category %}
-                    {{ current_category.name }} <span class="text-gray-400 text-lg font-normal">({{ page_obj.paginator.count }} kitab)</span>
-                {% else %}
-                    Bütün Kitablar
-                {% endif %}
-            </h1>
+        <div id="book-list-container" class="relative">
+            <!-- Loading Overlay -->
+            <div id="loading-overlay" class="absolute inset-0 bg-white/50 z-10 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+                <div class="w-12 h-12 border-4 border-penguin-orange border-t-transparent rounded-full animate-spin"></div>
+            </div>
             
-            <div class="flex items-center space-x-4">
-                <span class="text-sm text-gray-500">Sırala:</span>
-                <select class="bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-penguin-orange focus:border-transparent">
-                    <option>Yeni gələnlər</option>
-                    <option>Qiymət (Artan)</option>
-                    <option>Qiymət (Azalan)</option>
-                    <option>Populyarlıq</option>
-                </select>
-            </div>
+            {% include 'books/includes/book_list_content.html' %}
         </div>
-
-        {% if books %}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for book in books %}
-            <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition group border border-gray-100 flex flex-col h-full">
-                <div class="relative aspect-[3/4] bg-gray-50 overflow-hidden">
-                    {% if book.cover_image %}
-                    <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                    {% else %}
-                    <div class="w-full h-full flex items-center justify-center text-gray-300">
-                        <i class="fas fa-book text-6xl"></i>
-                    </div>
-                    {% endif %}
-                    
-                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition duration-300"></div>
-                    
-                    <div class="absolute top-4 right-4 flex flex-col space-y-2 translate-x-12 group-hover:translate-x-0 transition duration-300">
-                        <button class="bg-white p-3 rounded-full shadow-md text-red-500 hover:bg-red-500 hover:text-white transition">
-                            <i class="far fa-heart"></i>
-                        </button>
-                        <a href="{{ book.get_absolute_url }}" class="bg-white p-3 rounded-full shadow-md text-penguin-navy hover:bg-penguin-navy hover:text-white transition">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                    </div>
-                    
-                    {% if book.discount_price %}
-                    <span class="absolute top-4 left-4 bg-penguin-orange text-white px-3 py-1 rounded-lg text-xs font-bold shadow-lg">
-                        Endirim
-                    </span>
-                    {% endif %}
-                </div>
-                <div class="p-6 flex flex-col flex-grow">
-                    <p class="text-xs text-penguin-orange font-bold uppercase mb-2">
-                        {{ book.categories.first.name|default:"Kitab" }}
-                    </p>
-                    <h3 class="font-bold text-penguin-navy mb-1 group-hover:text-penguin-orange transition">
-                        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
-                    </h3>
-                    <p class="text-sm text-gray-500 mb-4">{{ book.authors.all|join:", " }}</p>
-                    
-                    <div class="mt-auto flex items-center justify-between pt-4 border-t border-gray-50">
-                        <div>
-                            <span class="text-xl font-black text-penguin-navy">{{ book.final_price }} AZN</span>
-                            {% if book.discount_price %}
-                            <span class="text-sm text-gray-400 line-through ml-2">{{ book.price }} AZN</span>
-                            {% endif %}
-                        </div>
-                        <button class="bg-penguin-navy text-white p-3 rounded-xl hover:bg-penguin-orange transition transform hover:scale-110 shadow-lg">
-                            <i class="fas fa-shopping-basket"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        
-        <!-- Pagination -->
-        {% if is_paginated %}
-        <div class="mt-12 flex justify-center">
-            <nav class="flex items-center space-x-2">
-                {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}" class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-200 text-gray-600 hover:bg-penguin-navy hover:text-white transition">
-                    <i class="fas fa-chevron-left"></i>
-                </a>
-                {% endif %}
-                
-                {% for num in page_obj.paginator.page_range %}
-                    {% if page_obj.number == num %}
-                    <span class="w-10 h-10 flex items-center justify-center rounded-lg bg-penguin-orange text-white font-bold shadow-md">
-                        {{ num }}
-                    </span>
-                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                    <a href="?page={{ num }}" class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-200 text-gray-600 hover:border-penguin-orange hover:text-penguin-orange transition">
-                        {{ num }}
-                    </a>
-                    {% endif %}
-                {% endfor %}
-                
-                {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}" class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-200 text-gray-600 hover:bg-penguin-navy hover:text-white transition">
-                    <i class="fas fa-chevron-right"></i>
-                </a>
-                {% endif %}
-            </nav>
-        </div>
-        {% endif %}
-        
-        {% else %}
-        <div class="bg-white p-12 rounded-3xl text-center border border-dashed border-gray-300">
-            <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-300 text-3xl">
-                <i class="fas fa-search"></i>
-            </div>
-            <h2 class="text-2xl font-bold text-penguin-navy mb-2">Kitab tapılmadı</h2>
-            <p class="text-gray-500">Təəssüf ki, bu kateqoriyada hələ heç bir kitabımız yoxdur.</p>
-            <a href="{% url 'books:book_list' %}" class="mt-8 inline-block bg-penguin-navy text-white px-8 py-3 rounded-full font-bold hover:bg-penguin-orange transition shadow-lg">
-                Bütün Kitablara Bax
-            </a>
-        </div>
-        {% endif %}
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    const container = $('#book-list-container');
+    const overlay = $('#loading-overlay');
+    const filterForm = $('form');
+
+    function updateSection(url, pushState = true) {
+        overlay.removeClass('opacity-0 pointer-events-none');
+        
+        $.ajax({
+            url: url,
+            headers: {'X-Requested-With': 'XMLHttpRequest'},
+            success: function(data) {
+                container.html(data);
+                if (pushState) {
+                    window.history.pushState({path: url}, '', url);
+                }
+                overlay.addClass('opacity-0 pointer-events-none');
+                
+                // Active category highlight management
+                const newUrl = new URL(url, window.location.origin);
+                const pathParts = newUrl.pathname.split('/');
+                const slugCandidate = pathParts[pathParts.length - 2] || '';
+                
+                $('.ajax-filter-link').removeClass('bg-penguin-navy bg-penguin-orange text-white font-bold shadow-md')
+                    .addClass('text-gray-600');
+                
+                if (newUrl.pathname === '{% url "books:book_list" %}') {
+                    $('.ajax-filter-link[href="{% url "books:book_list" %}"]').addClass('bg-penguin-orange text-white font-bold shadow-md').removeClass('text-gray-600');
+                } else {
+                    $(`.ajax-filter-link[href*="${slugCandidate}"]`).addClass('bg-penguin-navy text-white font-bold shadow-md').removeClass('text-gray-600');
+                }
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    }
+
+    // Handle form input changes for instant filtering
+    filterForm.on('change', 'input[type="radio"], select', function() {
+        const url = filterForm.attr('action') + '?' + filterForm.serialize();
+        updateSection(url);
+    });
+
+    // Category Sidebar AJAX clicks
+    $(document).on('click', '.ajax-filter-link', function(e) {
+        e.preventDefault();
+        updateSection($(this).attr('href'));
+    });
+
+    // Real-time Category Search in Sidebar
+    $('#cat-search').on('input', function() {
+        const val = $(this).val().toLowerCase();
+        $('.cat-item').each(function() {
+            const name = $(this).find('a').data('name');
+            if (name.includes(val)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
+
+    // Debounce search input
+    let searchTimeout;
+    filterForm.on('input', 'input[name="q"]', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const url = filterForm.attr('action') + '?' + filterForm.serialize();
+            updateSection(url);
+        }, 500);
+    });
+
+    // Handle pagination through AJAX
+    $(document).on('click', '.ajax-page', function(e) {
+        e.preventDefault();
+        const url = $(this).attr('href');
+        updateSection(url);
+    });
+
+    // Handle sorting change (inside the dynamic content)
+    $(document).on('change', 'select[name="sort"]', function() {
+        const sortVal = $(this).val();
+        let currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set('sort', sortVal);
+        updateSection(currentUrl.toString());
+    });
+
+    // Handle back/forward browser buttons
+    window.onpopstate = function(e) {
+        if (e.state) {
+            updateSection(e.state.path, false);
+        }
+    };
+});
+</script>
+
+<style>
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+</style>
 {% endblock %}

@@ -86,17 +86,42 @@
 
             <div class="flex flex-col sm:flex-row gap-4 mb-12">
                 <div class="flex items-center border border-gray-200 rounded-xl overflow-hidden h-14 bg-white shadow-sm">
-                    <button class="px-5 py-2 hover:bg-gray-50 text-gray-400 transition">-</button>
-                    <input type="number" value="1" class="w-12 text-center font-bold text-penguin-navy focus:outline-none" readonly>
-                    <button class="px-5 py-2 hover:bg-gray-50 text-gray-400 transition">+</button>
+                    <button class="qty-btn detail-minus px-5 py-2 hover:bg-gray-50 text-gray-400 transition" data-action="minus">-</button>
+                    <input type="number" id="detail-qty" value="1" min="1" class="w-12 text-center font-bold text-penguin-navy focus:outline-none" readonly>
+                    <button class="qty-btn detail-plus px-5 py-2 hover:bg-gray-50 text-gray-400 transition" data-action="plus">+</button>
                 </div>
-                <button class="flex-grow flex items-center justify-center bg-penguin-navy text-white h-14 rounded-xl font-bold text-lg hover:bg-penguin-orange transition transform active:scale-95 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed" {% if book.stock == 0 %}disabled{% endif %}>
+                <button class="add-to-cart flex-grow flex items-center justify-center bg-penguin-navy text-white h-14 rounded-xl font-bold text-lg hover:bg-penguin-orange transition transform active:scale-95 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed" 
+                        data-url="{% url 'cart:cart_add' book.id %}" 
+                        id="detail-add-btn"
+                        {% if book.stock == 0 %}disabled{% endif %}>
                     <i class="fas fa-shopping-basket mr-3"></i> Səbətə Əlavə Et
                 </button>
-                <button class="w-14 h-14 flex items-center justify-center border border-gray-200 rounded-xl text-red-500 hover:bg-red-50 transition shadow-sm">
+                <button class="w-14 h-14 flex items-center justify-center border border-gray-100 rounded-xl text-red-500 hover:bg-red-50 transition shadow-sm">
                     <i class="far fa-heart text-xl"></i>
                 </button>
             </div>
+
+            {% block extra_js %}
+            <script>
+            $(document).ready(function() {
+                $('.qty-btn').on('click', function() {
+                    const btn = $(this);
+                    const input = $('#detail-qty');
+                    const action = btn.data('action');
+                    let currentVal = parseInt(input.val());
+
+                    if (action === 'plus') {
+                        currentVal++;
+                    } else if (action === 'minus' && currentVal > 1) {
+                        currentVal--;
+                    }
+
+                    input.val(currentVal);
+                    $('#detail-add-btn').data('qty', currentVal);
+                });
+            });
+            </script>
+            {% endblock %}
 
             <!-- Tabs/Metadata -->
             <div class="mt-auto">

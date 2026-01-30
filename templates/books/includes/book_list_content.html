@@ -1,0 +1,118 @@
+<div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+    <h1 class="text-3xl font-extrabold text-penguin-navy">
+        {% if current_category %}
+            {{ current_category.name }} <span class="text-gray-400 text-lg font-normal">({{ page_obj.paginator.count }} kitab)</span>
+        {% else %}
+            Bütün Kitablar <span class="text-gray-400 text-lg font-normal">({{ page_obj.paginator.count }} kitab)</span>
+        {% endif %}
+    </h1>
+    
+    <div class="flex items-center space-x-4">
+        <span class="text-sm text-gray-500">Sırala:</span>
+        <select name="sort" class="bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-penguin-orange focus:border-transparent cursor-pointer ajax-filter">
+            <option value="-created_at" {% if active_sort == '-created_at' %}selected{% endif %}>Yeni gələnlər</option>
+            <option value="price" {% if active_sort == 'price' %}selected{% endif %}>Qiymət (Artan)</option>
+            <option value="-price" {% if active_sort == '-price' %}selected{% endif %}>Qiymət (Azalan)</option>
+            <option value="-views_count" {% if active_sort == '-views_count' %}selected{% endif %}>Populyarlıq</option>
+        </select>
+    </div>
+</div>
+
+{% if books %}
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for book in books %}
+    <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition group border border-gray-100 flex flex-col h-full animate-fade-in">
+        <div class="relative aspect-[3/4] bg-gray-50 overflow-hidden">
+            {% if book.cover_image %}
+            <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+            {% else %}
+            <div class="w-full h-full flex items-center justify-center text-gray-300">
+                <i class="fas fa-book text-6xl"></i>
+            </div>
+            {% endif %}
+            
+            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition duration-300"></div>
+            
+            <div class="absolute top-4 right-4 flex flex-col space-y-2 translate-x-12 group-hover:translate-x-0 transition duration-300">
+                <button class="bg-white p-3 rounded-full shadow-md text-red-500 hover:bg-red-500 hover:text-white transition">
+                    <i class="far fa-heart"></i>
+                </button>
+                <a href="{{ book.get_absolute_url }}" class="bg-white p-3 rounded-full shadow-md text-penguin-navy hover:bg-penguin-navy hover:text-white transition">
+                    <i class="fas fa-eye"></i>
+                </a>
+            </div>
+            
+            {% if book.discount_price %}
+            <span class="absolute top-4 left-4 bg-penguin-orange text-white px-3 py-1 rounded-lg text-xs font-bold shadow-lg">
+                Endirim
+            </span>
+            {% endif %}
+        </div>
+        <div class="p-6 flex flex-col flex-grow">
+            <p class="text-xs text-penguin-orange font-bold uppercase mb-2">
+                {{ book.categories.first.name|default:"Kitab" }}
+            </p>
+            <h3 class="font-bold text-penguin-navy mb-1 group-hover:text-penguin-orange transition">
+                <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+            </h3>
+            <p class="text-sm text-gray-500 mb-4">{{ book.authors.all|join:", " }}</p>
+            
+            <div class="mt-auto flex items-center justify-between pt-4 border-t border-gray-50">
+                <div>
+                    <span class="text-xl font-black text-penguin-navy">{{ book.final_price }} AZN</span>
+                    {% if book.discount_price %}
+                    <span class="text-sm text-gray-400 line-through ml-2">{{ book.price }} AZN</span>
+                    {% endif %}
+                </div>
+                <button class="add-to-cart bg-penguin-navy text-white p-3 rounded-xl hover:bg-penguin-orange transition transform hover:scale-110 shadow-lg" data-url="{% url 'cart:cart_add' book.id %}">
+                    <i class="fas fa-shopping-basket"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if is_paginated %}
+<div class="mt-12 flex justify-center">
+    <nav class="flex items-center space-x-2">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="ajax-page w-10 h-10 flex items-center justify-center rounded-lg border border-gray-200 text-gray-600 hover:bg-penguin-navy hover:text-white transition">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        {% endif %}
+        
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+            <span class="w-10 h-10 flex items-center justify-center rounded-lg bg-penguin-orange text-white font-bold shadow-md">
+                {{ num }}
+            </span>
+            {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'2' %}
+            <a href="?page={{ num }}" class="ajax-page w-10 h-10 flex items-center justify-center rounded-lg border border-gray-200 text-gray-600 hover:border-penguin-orange hover:text-penguin-orange transition">
+                {{ num }}
+            </a>
+            {% endif %}
+        {% endfor %}
+        
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="ajax-page w-10 h-10 flex items-center justify-center rounded-lg border border-gray-200 text-gray-600 hover:bg-penguin-navy hover:text-white transition">
+            <i class="fas fa-chevron-right"></i>
+        </a>
+        {% endif %}
+    </nav>
+</div>
+{% endif %}
+
+{% else %}
+<div class="bg-white p-12 rounded-3xl text-center border border-dashed border-gray-300 animate-fade-in">
+    <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-300 text-3xl">
+        <i class="fas fa-search"></i>
+    </div>
+    <h2 class="text-2xl font-bold text-penguin-navy mb-2">Kitab tapılmadı</h2>
+    <p class="text-gray-500">Təəssüf ki, axtarışınıza uyğun heç bir kitab tapılmadı.</p>
+    <button onclick="window.location.href='.'" class="mt-8 inline-block bg-penguin-navy text-white px-8 py-3 rounded-full font-bold hover:bg-penguin-orange transition shadow-lg">
+        Filtrləri Sıfırla
+    </button>
+</div>
+{% endif %}

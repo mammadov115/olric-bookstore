@@ -51,18 +51,18 @@ This document serves as the primary tracking mechanism for the development of Ol
     - **Views:** Book List, Book Detail, Category Browse.
     - **Templates:** Product grids and feature-rich detail pages.
     - **Visual/Functional Result:** Users can browse the collection, view high-res book covers, and read descriptions in a clean UI.
-- [ ] **Search & Filtering Intelligence**
+- [x] **Search & Filtering Intelligence**
     - **Logic:** Full-text search and faceted filtering (by author, price range, format).
     - **Visual/Functional Result:** A search bar that delivers instant results and sidebar filters to narrow down the catalog.
 
 ## 🛒 4. Commerce & Shopping Flow (Cart App)
 *Facilitating a smooth selection process for shoppers.*
 
-- [ ] **Universal Shopping Cart**
+- [x] **Universal Shopping Cart**
     - **Models:** `Cart`, `CartItem`.
     - **Logic:** Session-based persistence for guests and DB-sync for registered users.
     - **Visual/Functional Result:** A persistent cart that remembers items across sessions with AJAX-based quantity updates.
-- [ ] **Dynamic Cart UI**
+- [x] **Dynamic Cart UI**
     - **Template:** Floating cart summary and a dedicated Cart management page.
     - **Visual/Functional Result:** Real-time feedback when adding books to cart without page refreshes.
 

@@ -45,9 +45,23 @@
             </div>
 
             <div class="flex items-center space-x-4">
-                <a href="#" class="text-gray-600 hover:text-penguin-orange"><i class="fas fa-search"></i></a>
+                <a href="{% url 'books:book_list' %}" class="text-gray-600 hover:text-penguin-orange"><i class="fas fa-search"></i></a>
                 <a href="#" class="text-gray-600 hover:text-penguin-orange"><i class="fas fa-heart"></i></a>
-                <a href="#" class="text-gray-600 hover:text-penguin-orange"><i class="fas fa-shopping-cart"></i></a>
+                <div class="relative group">
+                    <a href="{% url 'cart:cart_detail' %}" class="text-gray-600 hover:text-penguin-orange h-10 w-10 flex items-center justify-center rounded-full hover:bg-gray-50 transition relative">
+                        <i class="fas fa-shopping-cart"></i>
+                        {% if cart.get_total_items > 0 %}
+                        <span class="navbar-cart-count absolute -top-1 -right-1 bg-penguin-orange text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full group-hover:scale-110 transition">
+                            {{ cart.get_total_items }}
+                        </span>
+                        {% endif %}
+                    </a>
+                    
+                    <!-- Floating Cart Summary -->
+                    <div id="mini-cart-container">
+                        {% include 'cart/includes/mini_cart.html' %}
+                    </div>
+                </div>
                 
                 {% if request.user.is_authenticated %}
                     <a href="#" class="text-gray-600 hover:text-penguin-orange"><i class="fas fa-user"></i></a>
@@ -112,8 +126,96 @@
         </div>
     </footer>
 
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-8 right-8 z-[100] flex flex-col gap-4"></div>
+
     <!-- jQuery CDN -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    <script>
+    $(document).ready(function() {
+        // Global Add to Cart Handler
+        $(document).on('click', '.add-to-cart', function(e) {
+            e.preventDefault();
+            const btn = $(this);
+            const url = btn.data('url');
+            const qty = btn.data('qty') || 1;
+
+            btn.addClass('pointer-events-none opacity-70');
+            const originalIcon = btn.find('i').attr('class');
+            btn.find('i').attr('class', 'fas fa-spinner fa-spin');
+
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: {
+                    'quantity': qty,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(data) {
+                    showToast(data.message, 'success');
+                    updateNavbarCart(data.total_items);
+                    
+                    // Update Mini Cart Floating Summary
+                    if (data.mini_cart_html) {
+                        $('#mini-cart-container').html(data.mini_cart_html);
+                    }
+                    
+                    setTimeout(() => {
+                        btn.removeClass('pointer-events-none opacity-70');
+                        btn.find('i').attr('class', originalIcon);
+                    }, 500);
+                },
+                error: function() {
+                    showToast('Xəta baş verdi. Yenidən yoxlayın.', 'error');
+                    btn.removeClass('pointer-events-none opacity-70');
+                    btn.find('i').attr('class', originalIcon);
+                }
+            });
+        });
+
+        function updateNavbarCart(count) {
+            let container = $('.relative.group > a.text-gray-600'); // Navbar cart anchor
+            let counter = $('.navbar-cart-count');
+            
+            if (counter.length === 0 && count > 0) {
+                // Manually inject counter if it didn't exist (empty cart state)
+                container.append(`<span class="navbar-cart-count absolute -top-1 -right-1 bg-penguin-orange text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full group-hover:scale-110 transition scale-0 animate-bounce">
+                    ${count}
+                </span>`);
+                setTimeout(() => $('.navbar-cart-count').removeClass('scale-0'), 10);
+            } else if (counter.length > 0) {
+                counter.text(count).addClass('scale-125');
+                setTimeout(() => counter.removeClass('scale-125'), 200);
+            }
+            // If counter.length === 0 and count === 0, do nothing (cart is empty, no counter needed)
+        }
+
+        function showToast(message, type = 'success') {
+            const id = Date.now();
+            const bg = type === 'success' ? 'bg-penguin-navy' : 'bg-red-500';
+            const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+            
+            const toast = `
+                <div id="toast-${id}" class="${bg} text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center space-x-4 transform translate-y-20 opacity-0 transition-all duration-500 border border-white/10 backdrop-blur-md">
+                    <i class="fas ${icon} text-lg"></i>
+                    <span class="font-bold text-sm">${message}</span>
+                </div>
+            `;
+            
+            $('#toast-container').append(toast);
+            
+            setTimeout(() => {
+                $(`#toast-${id}`).removeClass('translate-y-20 opacity-0');
+            }, 100);
+            
+            setTimeout(() => {
+                $(`#toast-${id}`).addClass('translate-y-20 opacity-0');
+                setTimeout(() => $(`#toast-${id}`).remove(), 500);
+            }, 4000);
+        }
+    });
+    </script>
     
     <!-- Custom JS -->
     {% block extra_js %}{% endblock %}
