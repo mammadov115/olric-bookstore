@@ -39,9 +39,9 @@
             <a href="/" class="text-2xl font-bold text-penguin-navy">Olric<span class="text-penguin-orange">Books</span></a>
             
             <div class="hidden md:flex space-x-6">
-                <a href="#" class="text-gray-600 hover:text-penguin-orange">Kitablar</a>
-                <a href="#" class="text-gray-600 hover:text-penguin-orange">Yazıçılar</a>
-                <a href="#" class="text-gray-600 hover:text-penguin-orange">Endirimlər</a>
+                <a href="{% url 'books:book_list' %}" class="text-gray-600 hover:text-penguin-orange transition">Kitablar</a>
+                <a href="{% url 'books:category_list' %}" class="text-gray-600 hover:text-penguin-orange transition">Kateqoriyalar</a>
+                <a href="#" class="text-gray-600 hover:text-penguin-orange transition">Endirimlər</a>
             </div>
 
             <div class="flex items-center space-x-4">

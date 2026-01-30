@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Kateqoriyalar | Olric Bookstore{% endblock %}
+
+{% block content %}
+<section class="mb-12 text-center">
+    <h1 class="text-4xl md:text-5xl font-extrabold text-penguin-navy mb-4">Geniş <span class="text-penguin-orange">Kataloqumuz</span></h1>
+    <p class="text-gray-500 max-w-2xl mx-auto">Janrlar və mövzular üzrə axtardığınız bütün kitabları asanlıqla tapın.</p>
+</section>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for cat in categories %}
+    <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-xl transition group">
+        <div class="flex items-center justify-between mb-8">
+            <div class="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center text-penguin-navy text-3xl group-hover:bg-penguin-orange group-hover:text-white transition transform group-hover:rotate-6">
+                <i class="fas fa-book"></i>
+            </div>
+            <a href="{% url 'books:category_books' cat.slug %}" class="bg-gray-50 text-gray-400 w-10 h-10 rounded-full flex items-center justify-center hover:bg-penguin-navy hover:text-white transition">
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        <h2 class="text-2xl font-bold text-penguin-navy mb-4 group-hover:text-penguin-orange transition">
+            <a href="{% url 'books:category_books' cat.slug %}">{{ cat.name }}</a>
+        </h2>
+        
+        {% if cat.description %}
+        <p class="text-gray-500 text-sm mb-6 leading-relaxed">
+            {{ cat.description|truncatewords:20 }}
+        </p>
+        {% endif %}
+        
+        {% if cat.children.exists %}
+        <div class="flex flex-wrap gap-2">
+            {% for sub in cat.children.all|slice:":5" %}
+            <a href="{% url 'books:category_books' sub.slug %}" class="bg-gray-50 text-gray-600 px-3 py-1 rounded-full text-xs hover:bg-penguin-navy hover:text-white transition">
+                {{ sub.name }}
+            </a>
+            {% endfor %}
+            {% if cat.children.count > 5 %}
+            <span class="text-gray-400 text-xs self-center">+{{ cat.children.count|add:"-5" }} daha</span>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

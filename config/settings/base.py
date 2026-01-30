@@ -154,12 +154,17 @@ CACHES = {
 }
 
 # Ratelimit xətalarını susdurmaq üçün bu mütləqdir
-SILENCED_SYSTEM_CHECKS = ['django_ratelimit.E003']
+SILENCED_SYSTEM_CHECKS = ['django_ratelimit.E003', 'django_ratelimit.W001']
+
+AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesStandaloneBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 # Axes Configuration
 AXES_FAILURE_LIMIT = 5
 AXES_COOLOFF_TIME = 1  # hours
-AXES_LOCK_OUT_BY_COMBINATION_USER_AND_IP = True
+AXES_LOCKOUT_PARAMETERS = ["ip_address", "username"]
 
 # Security Headers (Base)
 X_FRAME_OPTIONS = 'DENY'

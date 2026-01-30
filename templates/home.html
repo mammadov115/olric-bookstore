@@ -13,10 +13,10 @@
                 Minlərlə kitab, onlarla janr və ən sevdiyiniz yazıçılar bir ünvanda. Olric ilə mütaliə daha maraqlıdır.
             </p>
             <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
-                <a href="#" class="bg-penguin-orange text-white px-8 py-4 rounded-full font-bold hover:bg-opacity-90 transition transform hover:scale-105 shadow-lg">
+                <a href="{% url 'books:book_list' %}" class="bg-penguin-orange text-white px-8 py-4 rounded-full font-bold hover:bg-opacity-90 transition transform hover:scale-105 shadow-lg">
                     İndi Alış-veriş Et
                 </a>
-                <a href="#" class="bg-white text-penguin-navy px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition shadow-lg">
+                <a href="{% url 'books:book_list' %}" class="bg-white text-penguin-navy px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition shadow-lg">
                     Yeni Gələnlər
                 </a>
             </div>
@@ -34,11 +34,11 @@
 <section class="mb-16">
     <div class="flex justify-between items-center mb-8">
         <h2 class="text-3xl font-bold text-penguin-navy">Kateqoriyalar</h2>
-        <a href="#" class="text-penguin-orange font-semibold hover:underline">Hamısına bax <i class="fas fa-arrow-right ml-2"></i></a>
+        <a href="{% url 'books:category_list' %}" class="text-penguin-orange font-semibold hover:underline">Hamısına bax <i class="fas fa-arrow-right ml-2"></i></a>
     </div>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
         {% for cat in categories %}
-        <a href="#" class="group bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:border-penguin-orange transition text-center">
+        <a href="{% url 'books:category_books' cat.slug %}" class="group bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:border-penguin-orange transition text-center">
             <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-penguin-orange group-hover:text-white transition text-penguin-navy text-2xl">
                 <i class="fas fa-book"></i>
             </div>
@@ -77,6 +77,9 @@
                     <button class="bg-white p-3 rounded-full shadow-md text-red-500 hover:bg-red-500 hover:text-white transition">
                         <i class="far fa-heart"></i>
                     </button>
+                    <a href="{{ book.get_absolute_url }}" class="bg-white p-3 rounded-full shadow-md text-penguin-navy hover:bg-penguin-navy hover:text-white transition">
+                        <i class="fas fa-eye"></i>
+                    </a>
                     <button class="bg-white p-3 rounded-full shadow-md text-penguin-navy hover:bg-penguin-navy hover:text-white transition">
                         <i class="fas fa-shopping-basket"></i>
                     </button>
@@ -89,7 +92,9 @@
             </div>
             <div class="p-6">
                 <p class="text-xs text-penguin-orange font-bold uppercase mb-2">{{ book.categories.first.name }}</p>
-                <h3 class="font-bold text-penguin-navy mb-1 truncate">{{ book.title }}</h3>
+                <h3 class="font-bold text-penguin-navy mb-1 truncate hover:text-penguin-orange transition">
+                    <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+                </h3>
                 <p class="text-sm text-gray-500 mb-4">{{ book.authors.first.name }}</p>
                 <div class="flex items-center justify-between">
                     <div>

@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ book.title }} | Olric Bookstore{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-12">
+    <div class="flex flex-col lg:flex-row">
+        <!-- Book Cover Column -->
+        <div class="lg:w-2/5 bg-gray-50 p-8 md:p-12 flex items-center justify-center">
+            <div class="relative group">
+                <div class="absolute -inset-4 bg-penguin-yellow opacity-20 blur-2xl group-hover:opacity-30 transition transition-duration-500"></div>
+                {% if book.cover_image %}
+                <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="relative w-full max-w-sm rounded-lg shadow-2xl transform hover:scale-105 transition duration-500">
+                {% else %}
+                <div class="relative w-64 h-96 bg-white rounded-lg shadow-2xl flex items-center justify-center text-gray-200">
+                    <i class="fas fa-book text-9xl"></i>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Book Info Column -->
+        <div class="lg:w-3/5 p-8 md:p-12 lg:p-16 flex flex-col">
+            <nav class="flex text-sm text-gray-400 mb-6 space-x-2">
+                <a href="{% url 'books:home' %}" class="hover:text-penguin-orange">Mağaza</a>
+                <span>/</span>
+                <a href="{% url 'books:book_list' %}" class="hover:text-penguin-orange">Kitablar</a>
+                {% if book.categories.exists %}
+                <span>/</span>
+                <a href="{% url 'books:category_books' book.categories.first.slug %}" class="hover:text-penguin-orange">{{ book.categories.first.name }}</a>
+                {% endif %}
+            </nav>
+
+            <h1 class="text-4xl md:text-5xl font-extrabold text-penguin-navy mb-4 leading-tight">
+                {{ book.title }}
+            </h1>
+            
+            {% if book.subtitle %}
+            <h2 class="text-xl text-gray-500 mb-6 italic">{{ book.subtitle }}</h2>
+            {% endif %}
+
+            <div class="flex flex-wrap items-center gap-6 mb-8 pb-8 border-b border-gray-100">
+                <div class="flex items-center">
+                    <span class="text-sm text-gray-400 mr-2">Müəllif:</span>
+                    <div class="flex space-x-2">
+                        {% for author in book.authors.all %}
+                        <span class="font-bold text-penguin-navy">{{ author.name }}{% if not forloop.last %},{% endif %}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-sm text-gray-400 mr-2">Nəşriyyat:</span>
+                    <span class="font-bold text-penguin-navy">{{ book.publisher.name|default:"Naməlum" }}</span>
+                </div>
+                <div class="flex items-center text-penguin-orange">
+                    <div class="flex text-xs mr-2">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <span class="text-sm font-bold">4.5 (120 rəy)</span>
+                </div>
+            </div>
+
+            <div class="mb-10">
+                <div class="flex items-baseline mb-2">
+                    <span class="text-4xl font-black text-penguin-navy">{{ book.final_price }} AZN</span>
+                    {% if book.discount_price %}
+                    <span class="text-xl text-gray-400 line-through ml-4">{{ book.price }} AZN</span>
+                    <span class="ml-4 bg-penguin-orange text-white px-3 py-1 rounded-full text-xs font-bold">
+                        {% widthratio book.discount_price book.price 100 as discount %}
+                        {{ 100|add:discount }}% Endirim
+                    </span>
+                    {% endif %}
+                </div>
+                <p class="text-sm text-green-600 font-medium">
+                    {% if book.stock > 0 %}
+                    <i class="fas fa-check-circle mr-1"></i> Stokda var ({{ book.stock }} ədəd)
+                    {% else %}
+                    <span class="text-red-600"><i class="fas fa-times-circle mr-1"></i> Stokda yoxdur</span>
+                    {% endif %}
+                </p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 mb-12">
+                <div class="flex items-center border border-gray-200 rounded-xl overflow-hidden h-14 bg-white shadow-sm">
+                    <button class="px-5 py-2 hover:bg-gray-50 text-gray-400 transition">-</button>
+                    <input type="number" value="1" class="w-12 text-center font-bold text-penguin-navy focus:outline-none" readonly>
+                    <button class="px-5 py-2 hover:bg-gray-50 text-gray-400 transition">+</button>
+                </div>
+                <button class="flex-grow flex items-center justify-center bg-penguin-navy text-white h-14 rounded-xl font-bold text-lg hover:bg-penguin-orange transition transform active:scale-95 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed" {% if book.stock == 0 %}disabled{% endif %}>
+                    <i class="fas fa-shopping-basket mr-3"></i> Səbətə Əlavə Et
+                </button>
+                <button class="w-14 h-14 flex items-center justify-center border border-gray-200 rounded-xl text-red-500 hover:bg-red-50 transition shadow-sm">
+                    <i class="far fa-heart text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Tabs/Metadata -->
+            <div class="mt-auto">
+                <div class="flex border-b border-gray-100 mb-6">
+                    <button class="pb-4 pr-8 border-b-2 border-penguin-orange font-bold text-penguin-navy">Təsvir</button>
+                    <button class="pb-4 pr-8 text-gray-400 hover:text-penguin-navy transition">Məlumat</button>
+                    <button class="pb-4 pr-8 text-gray-400 hover:text-penguin-navy transition">Rəylər (120)</button>
+                </div>
+                <div class="text-gray-600 leading-relaxed mb-8">
+                    {{ book.description|linebreaks }}
+                </div>
+                
+                <div class="grid grid-cols-2 gap-y-4 text-sm">
+                    <div class="flex flex-col">
+                        <span class="text-gray-400">ISBN</span>
+                        <span class="font-bold text-penguin-navy">{{ book.isbn }}</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-gray-400">Format</span>
+                        <span class="font-bold text-penguin-navy">{{ book.get_format_display }}</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-gray-400">Səhifə sayı</span>
+                        <span class="font-bold text-penguin-navy">{{ book.pages|default:"-" }}</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-gray-400">Dil</span>
+                        <span class="font-bold text-penguin-navy">{{ book.language|upper }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Related Books -->
+{% if related_books %}
+<section class="mb-16">
+    <div class="flex justify-between items-center mb-8">
+        <h2 class="text-3xl font-bold text-penguin-navy">Oxşar Kitablar</h2>
+        <a href="{% url 'books:book_list' %}" class="text-penguin-orange font-semibold hover:underline">Hamısına bax <i class="fas fa-arrow-right ml-2"></i></a>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {% for rel_book in related_books %}
+        <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition group border border-gray-100">
+            <div class="relative aspect-[3/4] bg-gray-50 overflow-hidden">
+                {% if rel_book.cover_image %}
+                <img src="{{ rel_book.cover_image.url }}" alt="{{ rel_book.title }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                {% endif %}
+                <div class="absolute inset-0 bg-black opacity-0 group-hover:bg-opacity-10 transition"></div>
+                <a href="{{ rel_book.get_absolute_url }}" class="absolute inset-0 z-10"></a>
+            </div>
+            <div class="p-6 text-center">
+                <h3 class="font-bold text-penguin-navy mb-1 truncate">{{ rel_book.title }}</h3>
+                <p class="text-sm text-gray-500 mb-4">{{ rel_book.authors.first.name }}</p>
+                <div class="font-black text-penguin-navy">{{ rel_book.final_price }} AZN</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}

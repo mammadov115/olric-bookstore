@@ -105,7 +105,7 @@ class Book(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('books:detail', kwargs={'slug': self.slug})
+        return reverse('books:book_detail', kwargs={'slug': self.slug})
 
     @property
     def final_price(self):
