@@ -13,9 +13,9 @@ class RegisterView(CreateView):
     success_url = reverse_lazy('books:home')
 
     def form_valid(self, form):
-        user = form.save()
-        user.backend = 'django.contrib.auth.backends.ModelBackend'
-        login(self.request, user)
+        self.object = form.save()
+        self.object.backend = 'django.contrib.auth.backends.ModelBackend'
+        login(self.request, self.object)
         return redirect(self.get_success_url())
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
