@@ -64,6 +64,11 @@
                 </div>
                 
                 {% if request.user.is_authenticated %}
+                    {% if request.user.is_staff %}
+                    <a href="{% url 'admin:index' %}" class="text-penguin-navy hover:text-penguin-orange font-bold text-sm mr-2" title="Admin Panel">
+                        <i class="fas fa-tools"></i>
+                    </a>
+                    {% endif %}
                     <a href="#" class="text-gray-600 hover:text-penguin-orange"><i class="fas fa-user"></i></a>
                 {% else %}
                     <a href="{% url 'login' %}" class="text-sm font-medium text-penguin-navy hover:text-penguin-orange">Giriş</a>

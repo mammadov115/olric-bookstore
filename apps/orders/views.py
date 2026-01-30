@@ -19,7 +19,15 @@ def order_create(request):
             # Pricing logic
             from decimal import Decimal
             order.subtotal = cart.get_total_price()
-            order.total_amount = order.subtotal + Decimal(order.shipping_cost) - Decimal(order.discount_amount)
+            order.discount_amount = Decimal(cart.get_discount())
+            order.shipping_cost = Decimal(0) # For now, can include shipping logic later
+            order.total_amount = Decimal(cart.get_total_price_after_discount()) + order.shipping_cost
+            
+            # Associate Coupon
+            coupon = cart.get_coupon()
+            if coupon:
+                order.coupon = coupon
+            
             order.save()
 
             # Create Order Items (Snapshots)
@@ -32,8 +40,14 @@ def order_create(request):
                     quantity=item.quantity
                 )
             
-            # Clear the cart after order
+            # Increment coupon usage AFTER order is saved
+            if coupon:
+                coupon.usage_count += 1
+                coupon.save()
+            
+            # Clear the cart and coupon session after order is complete
             cart.clear()
+            request.session.pop('coupon_id', None)
             
             if order.payment_method == 'card':
                 return redirect('payments:process', order_number=order.order_number)

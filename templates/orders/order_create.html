@@ -113,8 +113,14 @@
                 <div class="border-t border-gray-200 pt-4 space-y-3 text-sm">
                     <div class="flex justify-between text-gray-500">
                         <span>Cəm</span>
-                        <span>{{ cart.get_total_price }} AZN</span>
+                        <span>{{ cart.get_total_price|floatformat:2 }} AZN</span>
                     </div>
+                    {% if cart.get_discount > 0 %}
+                    <div class="flex justify-between text-green-600">
+                        <span>Endirim ({{ cart.get_coupon.code }})</span>
+                        <span class="font-bold">-{{ cart.get_discount|floatformat:2 }} AZN</span>
+                    </div>
+                    {% endif %}
                     <div class="flex justify-between text-gray-500">
                         <span>Çatdırılma</span>
                         <span class="text-green-600 font-bold">Pulsuz</span>
@@ -124,7 +130,7 @@
                 <div class="border-t border-gray-200 pt-4 mt-4">
                     <div class="flex justify-between items-end">
                         <span class="font-bold text-gray-700">Yekun Məbləğ</span>
-                        <span class="text-2xl font-black text-penguin-navy">{{ cart.get_total_price }} AZN</span>
+                        <span class="text-2xl font-black text-penguin-navy">{{ cart.get_total_price_after_discount|floatformat:2 }} AZN</span>
                     </div>
                 </div>
             </div>

@@ -75,7 +75,7 @@ This document serves as the primary tracking mechanism for the development of Ol
 - [x] **MilliPAY Integration**
     - **Logic:** Secure payment gateway integration for local bank cards.
     - **Visual/Functional Result:** Customers are redirected to the secure portal and return to a "Success" page upon completion.
-- [ ] **Promotional System (Coupons)**
+- [x] **Promotional System (Coupons)**
     - **Model:** `Coupon` (Percentage or Fixed discounts, usage limits).
     - **Visual/Functional Result:** A "Voucher Code" field during checkout that instantly recalculates the total.
 
