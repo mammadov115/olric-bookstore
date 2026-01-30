@@ -72,7 +72,7 @@ This document serves as the primary tracking mechanism for the development of Ol
 - [x] **Order Management Engine**
     - **Models:** `Order`, `OrderItem` (capturing price snapshots at time of purchase).
     - **Visual/Functional Result:** Permanent order history for users and an administration dashboard for fulfillment.
-- [ ] **MilliPAY Integration**
+- [x] **MilliPAY Integration**
     - **Logic:** Secure payment gateway integration for local bank cards.
     - **Visual/Functional Result:** Customers are redirected to the secure portal and return to a "Success" page upon completion.
 - [ ] **Promotional System (Coupons)**

@@ -35,6 +35,9 @@ def order_create(request):
             # Clear the cart after order
             cart.clear()
             
+            if order.payment_method == 'card':
+                return redirect('payments:process', order_number=order.order_number)
+            
             return render(request, 'orders/order_success.html', {'order': order})
     else:
         # Pre-fill with user info if authenticated
