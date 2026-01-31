@@ -50,9 +50,23 @@
             {% endif %}
         </div>
         <div class="p-4 md:p-6 flex flex-col flex-grow">
-            <p class="text-[10px] md:text-xs font-black text-primary uppercase mb-1 md:mb-2 tracking-wider">
+            <p class="text-[10px] md:text-xs font-black text-primary uppercase mb-1 tracking-wider">
                 {{ book.categories.first.name|default:"Kitab" }}
             </p>
+            
+            <div class="flex items-center gap-1 mb-1">
+                <div class="flex text-yellow-400 text-[10px]">
+                    {% with rating=book.avg_rating %}
+                    <i class="{% if rating >= 1 %}fas{% elif rating >= 0.5 %}fas fa-star-half-alt{% else %}far{% endif %} fa-star"></i>
+                    <i class="{% if rating >= 2 %}fas{% elif rating >= 1.5 %}fas fa-star-half-alt{% else %}far{% endif %} fa-star"></i>
+                    <i class="{% if rating >= 3 %}fas{% elif rating >= 2.5 %}fas fa-star-half-alt{% else %}far{% endif %} fa-star"></i>
+                    <i class="{% if rating >= 4 %}fas{% elif rating >= 3.5 %}fas fa-star-half-alt{% else %}far{% endif %} fa-star"></i>
+                    <i class="{% if rating >= 5 %}fas{% elif rating >= 4.5 %}fas fa-star-half-alt{% else %}far{% endif %} fa-star"></i>
+                    {% endwith %}
+                </div>
+                <span class="text-[10px] text-gray-400 font-bold">({{ book.avg_rating|floatformat:1 }})</span>
+            </div>
+
             <h3 class="font-bold text-secondary text-sm md:text-base mb-1 line-clamp-2 leading-snug group-hover:text-primary transition-colors">
                 <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
             </h3>

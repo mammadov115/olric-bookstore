@@ -114,6 +114,7 @@ class BookDetailView(DetailView):
         return Book.objects.filter(is_active=True).prefetch_related('authors', 'categories', 'publisher')
 
     def get_context_data(self, **kwargs):
+        from apps.reviews.forms import ReviewForm
         context = super().get_context_data(**kwargs)
         # Related books (from same category)
         first_category = self.object.categories.first()
@@ -122,4 +123,6 @@ class BookDetailView(DetailView):
                 is_active=True, 
                 categories=first_category
             ).exclude(id=self.object.id).prefetch_related('authors')[:4]
+            
+        context['review_form'] = ReviewForm()
         return context

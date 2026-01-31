@@ -111,5 +111,19 @@ class Book(models.Model):
     def final_price(self):
         return self.discount_price if self.discount_price else (self.price or 0)
 
+    @property
+    def avg_rating(self):
+        from apps.reviews.models import Review
+        reviews = Review.objects.filter(book=self, is_active=True)
+        if reviews.exists():
+            from django.db.models import Avg
+            return reviews.aggregate(Avg('rating'))['rating__avg'] or 0
+        return 0
+
+    @property
+    def review_count(self):
+        from apps.reviews.models import Review
+        return Review.objects.filter(book=self, is_active=True).count()
+
     def is_in_stock(self):
         return self.stock > 0

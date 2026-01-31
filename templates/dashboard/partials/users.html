@@ -31,7 +31,7 @@
                         <td class="px-8 py-6">
                             <div class="flex items-center gap-4">
                                 <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-penguin-navy to-slate-700 flex items-center justify-center text-white font-black text-sm shadow-lg shadow-slate-200">
-                                    {{ user.first_name|first|default:"U" }}
+                                    {{ user.first_name|first|default:user.email|first|upper }}
                                 </div>
                                 <div>
                                     <p class="text-sm font-bold text-slate-800">{{ user.get_full_name|default:user.email }}</p>
