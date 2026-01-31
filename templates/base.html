@@ -56,9 +56,15 @@
             </div>
 
             <div class="flex items-center space-x-4 md:space-x-8">
-                <!-- Search Icon (Desktop/Mobile) -->
                 <a href="{% url 'books:book_list' %}" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl text-secondary hover:bg-gray-100 transition-all">
                     <i class="fas fa-search text-lg"></i>
+                </a>
+
+                <a href="{% url 'wishlist:wishlist_list' %}" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl text-secondary hover:bg-gray-100 transition-all relative">
+                    <i class="far fa-heart text-lg"></i>
+                    <span class="wishlist-count absolute -top-1 -right-1 bg-secondary text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full shadow-lg ring-4 ring-white {% if wishlist_count == 0 %}hidden{% endif %}">
+                        {{ wishlist_count }}
+                    </span>
                 </a>
 
                 <div class="relative group">
@@ -226,6 +232,65 @@
                     showToast('Xəta baş verdi. Yenidən yoxlayın.', 'error');
                     btn.removeClass('pointer-events-none opacity-70');
                     btn.find('i').attr('class', originalIcon);
+                }
+            });
+        });
+
+        // Wishlist Toggle Handler
+        $(document).on('click', '.toggle-wishlist', function(e) {
+            e.preventDefault();
+            const btn = $(this);
+            const url = btn.data('url');
+            const icon = btn.find('i');
+
+            btn.addClass('pointer-events-none');
+            
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(data) {
+                    if (data.status === 'success') {
+                        if (data.added) {
+                            icon.removeClass('far').addClass('fas');
+                            showToast(data.message, 'success');
+                        } else {
+                            icon.removeClass('fas').addClass('far');
+                            showToast(data.message, 'success');
+                        }
+                        // Update counter if it exists (e.g. in navbar)
+                        const counter = $('.wishlist-count');
+                        if (counter.length) {
+                            counter.text(data.wishlist_count);
+                            if (data.wishlist_count > 0) {
+                                counter.removeClass('hidden');
+                            } else {
+                                counter.addClass('hidden');
+                            }
+                        }
+
+                        // Remove from DOM if on wishlist page and removed
+                        if (window.location.pathname === "{% url 'wishlist:wishlist_list' %}" && !data.added) {
+                            btn.closest('.group').fadeOut(300, function() {
+                                $(this).remove();
+                                if ($('#wishlist-grid-container .grid > div').length === 0) {
+                                    $('#wishlist-grid-container').addClass('hidden');
+                                    $('#wishlist-empty-state').removeClass('hidden');
+                                }
+                            });
+                        }
+                    }
+                    btn.removeClass('pointer-events-none');
+                },
+                error: function(xhr) {
+                    if (xhr.status === 403) {
+                        window.location.href = "{% url 'accounts:login' %}?next=" + window.location.pathname;
+                    } else {
+                        showToast('Xəta baş verdi.', 'error');
+                        btn.removeClass('pointer-events-none');
+                    }
                 }
             });
         });

@@ -107,8 +107,8 @@
                     <i class="fas fa-shopping-basket transition-transform group-hover:scale-110"></i> 
                     <span>Səbətə Əlavə Et</span>
                 </button>
-                <button class="w-16 h-16 flex items-center justify-center bg-white rounded-2xl text-red-500 hover:bg-red-50 transition-all shadow-lg border border-gray-100 group">
-                    <i class="far fa-heart text-xl transition-transform group-hover:scale-125"></i>
+                <button class="toggle-wishlist w-16 h-16 flex items-center justify-center bg-white rounded-2xl text-red-500 hover:bg-red-50 transition-all shadow-lg border border-gray-100 group" data-id="{{ book.id }}" data-url="{% url 'wishlist:toggle_wishlist' book.id %}">
+                    <i class="{% if book.id in wishlist_book_ids %}fas{% else %}far{% endif %} fa-heart text-xl transition-transform group-hover:scale-125"></i>
                 </button>
             </div>
 

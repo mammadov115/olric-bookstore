@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}İstək Siyahısı | Olric Bookstore{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12 animate-fade-in">
+    <div class="mb-12">
+        <h1 class="text-3xl md:text-5xl font-black text-secondary leading-tight">
+            İstək <span class="text-primary italic">Siyahınız</span>
+        </h1>
+        <p class="text-gray-400 font-bold mt-2 uppercase tracking-widest text-xs">
+            Bəyəndiyiniz kitabları burada toplayın
+        </p>
+    </div>
+
+    <!-- Wishlist Grid -->
+    <div id="wishlist-grid-container" class="{% if not wishlist_items %}hidden{% endif %}">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-10">
+            {% for item in wishlist_items %}
+            {% with book=item.book %}
+            <div class="group relative bg-white p-4 rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col h-full" id="wishlist-item-{{ item.id }}">
+                <div class="relative aspect-[3/4] rounded-[2rem] overflow-hidden mb-6 shadow-inner bg-gray-50">
+                    {% if book.cover_image %}
+                    <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="w-full h-full object-cover group-hover:scale-110 group-hover:rotate-2 transition-all duration-700">
+                    {% else %}
+                    <div class="w-full h-full flex items-center justify-center text-gray-200">
+                        <i class="fas fa-book text-5xl"></i>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="absolute top-4 right-4 z-20">
+                        <button class="toggle-wishlist w-10 h-10 bg-white/90 backdrop-blur rounded-full shadow-lg text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center active:scale-95" 
+                                data-id="{{ book.id }}" data-url="{% url 'wishlist:toggle_wishlist' book.id %}">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="px-2 pb-2 flex flex-col flex-grow">
+                    <p class="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-1 leading-none">{{ book.categories.first.name|default:"Kitab" }}</p>
+                    <h3 class="font-black text-secondary text-base md:text-lg mb-2 line-clamp-2 leading-tight group-hover:text-primary transition-colors">
+                        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a>
+                    </h3>
+                    <p class="text-xs font-bold text-gray-400 mb-6 leading-none">{{ book.authors.first.name }}</p>
+                    
+                    <div class="mt-auto flex items-center justify-between gap-4">
+                        <div class="flex flex-col">
+                            <span class="text-2xl font-black text-secondary tracking-tight">{{ book.final_price }} <span class="text-sm font-bold opacity-50">AZN</span></span>
+                        </div>
+                        <button class="add-to-cart w-12 h-12 bg-secondary text-white rounded-2xl hover:bg-primary transition-all duration-300 shadow-lg flex items-center justify-center active:scale-95" 
+                                data-url="{% url 'cart:cart_add' book.id %}" data-qty="1">
+                            <i class="fas fa-shopping-basket"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endwith %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div id="wishlist-empty-state" class="{% if wishlist_items %}hidden{% endif %} py-24 text-center bg-white rounded-[3rem] border border-gray-100 shadow-sm animate-fade-in">
+        <div class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-8 text-gray-200 text-4xl shadow-inner">
+            <i class="far fa-heart"></i>
+        </div>
+        <h2 class="text-2xl font-black text-secondary mb-4">İstək siyahınız boşdur</h2>
+        <p class="text-gray-400 font-bold max-w-sm mx-auto mb-10 leading-relaxed uppercase tracking-wider text-xs">
+            Bəyəndiyiniz kitabları sonra almaq üçün ürək ikonuna sıxaraq bura əlavə edə bilərsiniz.
+        </p>
+        <a href="{% url 'books:book_list' %}" class="btn btn-primary px-10 py-5 rounded-2xl shadow-xl shadow-primary/20">
+            Kitabları Kəşf Et
+        </a>
+    </div>
+</div>
+{% endblock %}

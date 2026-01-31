@@ -92,7 +92,7 @@ This document serves as the primary tracking mechanism for the development of Ol
 ## 🌟 7. Engagement & Social Proof (Reviews & Wishlist)
 *Building community trust and user retention.*
 
-- [ ] **Rating & Feedback Suite**
+- [x] **Rating & Feedback Suite**
     - **Model:** `Review` (1-5 Stars, Verified Purchase badge).
     - **Visual/Functional Result:** Star ratings displayed on book cards and user reviews section on detail pages.
 - [ ] **Personal Wishlist**
