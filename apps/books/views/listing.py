@@ -1,27 +1,7 @@
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import ListView
 from django.shortcuts import get_object_or_404
-from apps.books.models import Book, Category
-
-class HomeView(TemplateView):
-    template_name = 'home.html'
-
-    def get_context_data(self, **kwargs):
-        # Base class-dan mövcud context-i alırıq
-        context = super().get_context_data(**kwargs)
-        
-        # Sənədinə (rules.md) uyğun olaraq aktiv və önə çıxan kitabları gətiririk
-        context['featured_books'] = Book.objects.filter(
-            is_active=True, 
-            is_featured=True
-        ).prefetch_related('authors', 'categories')[:4] # Performance üçün prefetch
-        
-        # Ana kateqoriyaları gətiririk
-        context['categories'] = Category.objects.filter(
-            is_active=True, 
-            parent=None
-        ).order_by('order')[:8]
-        
-        return context
+from django.db.models import Q
+from apps.books.models import Book, Category, Author
 
 class BookListView(ListView):
     model = Book
@@ -34,8 +14,7 @@ class BookListView(ListView):
         return ['books/book_list.html']
 
     def get_queryset(self):
-        from django.db.models import Q
-        queryset = Book.objects.filter(is_active=True).prefetch_related('authors', 'categories')
+        queryset = Book.objects.with_stats().filter(is_active=True).prefetch_related('authors', 'categories')
         
         # 1. Full-text Search
         query = self.request.GET.get('q')
@@ -80,7 +59,6 @@ class BookListView(ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
-        from apps.books.models import Author
         context = super().get_context_data(**kwargs)
         context['all_categories'] = Category.objects.filter(is_active=True, parent=None).prefetch_related('children')
         context['current_category'] = self.category
@@ -104,25 +82,3 @@ class CategoryBrowseView(ListView):
     
     def get_queryset(self):
         return Category.objects.filter(is_active=True, parent=None).prefetch_related('children')
-
-class BookDetailView(DetailView):
-    model = Book
-    template_name = 'books/book_detail.html'
-    context_object_name = 'book'
-
-    def get_queryset(self):
-        return Book.objects.filter(is_active=True).prefetch_related('authors', 'categories', 'publisher')
-
-    def get_context_data(self, **kwargs):
-        from apps.reviews.forms import ReviewForm
-        context = super().get_context_data(**kwargs)
-        # Related books (from same category)
-        first_category = self.object.categories.first()
-        if first_category:
-            context['related_books'] = Book.objects.filter(
-                is_active=True, 
-                categories=first_category
-            ).exclude(id=self.object.id).prefetch_related('authors')[:4]
-            
-        context['review_form'] = ReviewForm()
-        return context

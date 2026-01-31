@@ -1,0 +1,69 @@
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 transition-transform duration-300 transform -translate-x-full md:translate-x-0 bg-penguin-navy text-white flex flex-col">
+            <div class="p-8">
+                <a href="/" class="text-2xl font-black flex items-center gap-2">
+                    <span class="w-10 h-10 bg-penguin-orange rounded-xl flex items-center justify-center rotate-3 shadow-lg group-hover:rotate-0 transition-all">
+                        <i class="fas fa-book-open text-white"></i>
+                    </span>
+                    <span>Olric<span class="text-penguin-orange">Admin</span></span>
+                </a>
+            </div>
+            
+            <nav class="flex-grow px-4 space-y-2 overflow-y-auto">
+                <p class="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Əsas Menyu</p>
+                
+                <button hx-get="{% url 'dashboard:stats' %}" 
+                        hx-target="#dashboard-content" 
+                        hx-push-url="true"
+                        class="sidebar-link active w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group">
+                    <i class="fas fa-chart-pie text-lg transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold">İcmal</span>
+                </button>
+
+                <button hx-get="{% url 'dashboard:orders' %}" 
+                        hx-target="#dashboard-content" 
+                        hx-push-url="true"
+                        class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group hover:bg-white/10">
+                    <i class="fas fa-shopping-bag text-lg transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold">Sifarişlər</span>
+                </button>
+
+                <button hx-get="{% url 'dashboard:books' %}" 
+                        hx-target="#dashboard-content" 
+                        hx-push-url="true"
+                        class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group hover:bg-white/10">
+                    <i class="fas fa-book text-lg transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold">Kitablar</span>
+                </button>
+
+                <button hx-get="{% url 'dashboard:users' %}" 
+                        hx-target="#dashboard-content" 
+                        hx-push-url="true"
+                        class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group hover:bg-white/10">
+                    <i class="fas fa-users text-lg transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold">İstifadəçilər</span>
+                </button>
+                
+                <button hx-get="{% url 'dashboard:couriers' %}" 
+                        hx-target="#dashboard-content" 
+                        hx-push-url="true"
+                        class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group hover:bg-white/10">
+                    <i class="fas fa-biking text-lg transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold">Kuryerlər</span>
+                </button>
+            </nav>
+
+            <div class="p-6">
+                <div class="bg-white/5 rounded-3xl p-4 border border-white/10">
+                    <p class="text-xs text-slate-400 mb-2">Giriş edib:</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-penguin-orange flex items-center justify-center font-bold">
+                            {{ request.user.first_name|first }}
+                        </div>
+                        <div class="overflow-hidden">
+                            <p class="font-bold truncate text-sm">{{ request.user.get_full_name }}</p>
+                            <p class="text-[10px] text-slate-400 truncate">{{ request.user.email }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>

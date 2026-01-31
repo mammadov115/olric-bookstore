@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-from apps.books.models import Book
 from apps.coupons.models import Coupon
 
 class Order(models.Model):
@@ -58,6 +57,7 @@ class Order(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+        app_label = 'orders'
 
     def __str__(self):
         return f"Sifariş #{self.order_number}"
@@ -71,6 +71,8 @@ class Order(models.Model):
             self.order_number = f"OLR{now.strftime('%y%m%d%H%M')}{random.randint(10, 99)}"
         super().save(*args, **kwargs)
 
+from apps.books.models import Book
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)
@@ -80,6 +82,9 @@ class OrderItem(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2) # Price at time of purchase
     quantity = models.PositiveIntegerField(default=1)
     
+    class Meta:
+        app_label = 'orders'
+
     def __str__(self):
         return f"{self.quantity}x {self.book_title} for Order {self.order.order_number}"
 
@@ -88,51 +93,3 @@ class OrderItem(models.Model):
         if self.price is None:
             return 0
         return self.price * self.quantity
-
-class Courier(models.Model):
-    """Delivery couriers"""
-    name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=20)
-    vehicle_type = models.CharField(max_length=50, blank=True)  # e.g., Motorcycle, Car, Van
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['name']
-
-    def __str__(self):
-        return f"{self.name} ({self.phone})"
-
-class Delivery(models.Model):
-    """Delivery tracking for orders"""
-    STATUS_CHOICES = [
-        ('pending', 'Gözləyir'),
-        ('assigned', 'Kuryerə təyin edilib'),
-        ('picked_up', 'Götürülüb'),
-        ('in_transit', 'Yoldadır'),
-        ('delivered', 'Çatdırılıb'),
-        ('failed', 'Uğursuz'),
-    ]
-    
-    order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='delivery')
-    courier = models.ForeignKey(Courier, on_delete=models.SET_NULL, null=True, blank=True, related_name='deliveries')
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    
-    # Timestamps
-    assigned_at = models.DateTimeField(null=True, blank=True)
-    picked_up_at = models.DateTimeField(null=True, blank=True)
-    delivered_at = models.DateTimeField(null=True, blank=True)
-    
-    # Tracking notes
-    notes = models.TextField(blank=True)
-    tracking_number = models.CharField(max_length=100, blank=True)
-    
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ['-created_at']
-        verbose_name_plural = 'Deliveries'
-
-    def __str__(self):
-        return f"Delivery for {self.order.order_number} - {self.get_status_display()}"

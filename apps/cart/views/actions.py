@@ -1,12 +1,8 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from apps.books.models import Book
-from .cart import CartService
-
-def cart_detail(request):
-    cart = CartService(request)
-    return render(request, 'cart/cart_detail.html', {'cart': cart})
+from apps.cart.cart import CartService
 
 @require_POST
 def cart_add(request, book_id):

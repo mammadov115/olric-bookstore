@@ -1,54 +1,10 @@
 from django.db import models
 from django.urls import reverse
-from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
-
-class Category(models.Model):
-    """
-    Hierarchical category system (Self-referencing).
-    Example: Fiction -> Mystery -> Noir.
-    """
-    name = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200, unique=True)
-    description = models.TextField(blank=True)
-    parent = models.ForeignKey(
-        'self', on_delete=models.CASCADE, null=True, blank=True, related_name='children'
-    )
-    image = models.ImageField(upload_to='categories/', blank=True)
-    is_active = models.BooleanField(default=True)
-    order = models.IntegerField(default=0)
-
-    class Meta:
-        verbose_name_plural = "Categories"
-        ordering = ['order', 'name']
-
-    def __str__(self):
-        full_path = [self.name]
-        k = self.parent
-        while k is not None:
-            full_path.append(k.name)
-            k = k.parent
-        return ' -> '.join(full_path[::-1])
-
-class Publisher(models.Model):
-    name = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True)
-    website = models.URLField(blank=True)
-    logo = models.ImageField(upload_to='publishers/', blank=True)
-
-    def __str__(self):
-        return self.name
-
-class Author(models.Model):
-    name = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True)
-    bio = models.TextField(blank=True)
-    photo = models.ImageField(upload_to='authors/', blank=True)
-    birth_date = models.DateField(null=True, blank=True)
-    nationality = models.CharField(max_length=100, blank=True)
-
-    def __str__(self):
-        return self.name
+from ..managers import BookManager
+from .category import Category
+from .publisher import Publisher
+from .author import Author
 
 class Book(models.Model):
     class Format(models.TextChoices):
@@ -66,7 +22,7 @@ class Book(models.Model):
     # Relationships
     authors = models.ManyToManyField(Author, related_name='books')
     publisher = models.ForeignKey(Publisher, on_delete=models.SET_NULL, null=True, related_name='books')
-    categories = models.ManyToManyField(Category, related_name='books') # 👈 Əlavə olundu
+    categories = models.ManyToManyField(Category, related_name='books')
     
     # Metadata
     publication_date = models.DateField(null=True, blank=True)
@@ -93,6 +49,8 @@ class Book(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    objects = BookManager()
+
     class Meta:
         ordering = ['-created_at']
         indexes = [
@@ -100,6 +58,7 @@ class Book(models.Model):
             models.Index(fields=['slug']),
             models.Index(fields=['is_active', 'is_featured']),
         ]
+        app_label = 'books'
 
     def __str__(self):
         return self.title
@@ -113,15 +72,22 @@ class Book(models.Model):
 
     @property
     def avg_rating(self):
+        if hasattr(self, '_avg_rating') and self._avg_rating is not None:
+            return round(self._avg_rating, 1)
+            
         from apps.reviews.models import Review
         reviews = Review.objects.filter(book=self, is_active=True)
         if reviews.exists():
             from django.db.models import Avg
-            return reviews.aggregate(Avg('rating'))['rating__avg'] or 0
+            avg = reviews.aggregate(Avg('rating'))['rating__avg']
+            return round(avg, 1) if avg else 0
         return 0
 
     @property
     def review_count(self):
+        if hasattr(self, '_review_count'):
+            return self._review_count
+            
         from apps.reviews.models import Review
         return Review.objects.filter(book=self, is_active=True).count()
 

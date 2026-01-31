@@ -12,38 +12,13 @@ def order_create(request):
     if request.method == 'POST':
         form = OrderCreateForm(request.POST)
         if form.is_valid():
-            order = form.save(commit=False)
-            if request.user.is_authenticated:
-                order.user = request.user
-            
-            # Pricing logic
-            from decimal import Decimal
-            order.subtotal = cart.get_total_price()
-            order.discount_amount = Decimal(cart.get_discount())
-            order.shipping_cost = Decimal(0) # For now, can include shipping logic later
-            order.total_amount = Decimal(cart.get_total_price_after_discount()) + order.shipping_cost
-            
-            # Associate Coupon
-            coupon = cart.get_coupon()
-            if coupon:
-                order.coupon = coupon
-            
-            order.save()
-
-            # Create Order Items (Snapshots)
-            for item in cart:
-                OrderItem.objects.create(
-                    order=order,
-                    book=item.book,
-                    book_title=item.book.title,
-                    price=item.book.final_price,
-                    quantity=item.quantity
-                )
-            
-            # Increment coupon usage AFTER order is saved
-            if coupon:
-                coupon.usage_count += 1
-                coupon.save()
+            # Delegate strict business logic to the service
+            from .services import OrderCoordinator
+            order = OrderCoordinator.create_order(
+                user=request.user,
+                order_instance=form.save(commit=False),
+                cart=cart
+            )
             
             # Clear the cart and coupon session after order is complete
             cart.clear()

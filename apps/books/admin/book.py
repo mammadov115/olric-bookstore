@@ -1,24 +1,5 @@
 from django.contrib import admin
-from .models import Category, Author, Book, Publisher
-
-@admin.register(Publisher)
-class PublisherAdmin(admin.ModelAdmin):
-    list_display = ('name', 'website')
-    search_fields = ('name',)
-
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'parent', 'is_active', 'order')
-    list_filter = ('is_active', 'parent')
-    search_fields = ('name',)
-    prepopulated_fields = {'slug': ('name',)}
-    ordering = ('order', 'name')
-
-@admin.register(Author)
-class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug')
-    search_fields = ('name', 'bio')
-    prepopulated_fields = {'slug': ('name',)}
+from apps.books.models import Book
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):

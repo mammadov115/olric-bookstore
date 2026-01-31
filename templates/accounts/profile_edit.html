@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Profilə Düzəliş Et | Olric Bookstore{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto py-12 px-4">
+    <div class="bg-white rounded-3xl shadow-xl p-8 border border-slate-100">
+        <h1 class="text-3xl font-black text-penguin-navy mb-8 text-center">Profilə Düzəliş Et</h1>
+        
+        <form method="post" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div class="space-y-2">
+                <label for="{{ field.id_for_label }}" class="block text-sm font-bold text-slate-700 ml-1">
+                    {{ field.label }}
+                </label>
+                {{ field.errors }}
+                <div class="relative">
+                    {% if field.name == 'bio' %}
+                        <textarea name="{{ field.name }}" id="{{ field.id_for_label }}" rows="4"
+                            class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-penguin-orange focus:ring-4 focus:ring-penguin-orange/10 font-medium transition-all resize-none"
+                            placeholder="{{ field.label }} daxil edin...">{{ field.value|default:'' }}</textarea>
+                    {% else %}
+                        <input type="{{ field.field.widget.input_type|default:'text' }}" 
+                            name="{{ field.name }}" 
+                            id="{{ field.id_for_label }}" 
+                            value="{{ field.value|default:'' }}"
+                            class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-penguin-orange focus:ring-4 focus:ring-penguin-orange/10 font-bold transition-all"
+                            placeholder="{{ field.label }}">
+                    {% endif %}
+                </div>
+                {% if field.help_text %}
+                <p class="text-xs text-slate-400 font-medium ml-1">{{ field.help_text }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+            <div class="pt-4 flex gap-4">
+                <a href="{% url 'books:home' %}" class="flex-1 px-6 py-4 rounded-xl bg-slate-100 text-slate-600 font-bold hover:bg-slate-200 transition-all text-center">
+                    Ləğv et
+                </a>
+                <button type="submit" class="flex-1 px-6 py-4 rounded-xl bg-penguin-orange text-white font-bold hover:bg-orange-600 shadow-lg shadow-orange-200 transition-all transform active:scale-95">
+                    Yadda saxla
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
