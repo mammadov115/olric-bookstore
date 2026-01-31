@@ -95,16 +95,16 @@ This document serves as the primary tracking mechanism for the development of Ol
 - [x] **Rating & Feedback Suite**
     - **Model:** `Review` (1-5 Stars, Verified Purchase badge).
     - **Visual/Functional Result:** Star ratings displayed on book cards and user reviews section on detail pages.
-- [ ] **Personal Wishlist**
+- [x] **Personal Wishlist**
     - **Model:** `Wishlist`.
     - **Visual/Functional Result:** A "Heart" icon on books allowing users to save items for future purchase.
 
 ## 📢 8. Automated Communication (Notifications)
 *Engagement through Email and SMS.*
 
-- [ ] **Transaction Alerts**
+- [x] **Transaction Alerts**
     - **Logic:** Trigger-based notifications for order status changes.
-    - **Visual/Functional Result:** Automated emails sent to users upon successful payment and delivery dispatch.
+    - **Visual/Functional Result:** Automated SMS sent to users upon successful payment and delivery dispatch.
 
 ## 📊 9. Admin Intelligence (Dashboard App)
 *Command and control for store operators.*
