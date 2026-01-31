@@ -1,0 +1,102 @@
+<section id="reviews" class="mb-20 animate-fade-in">
+    <div class="flex flex-col md:flex-row justify-between items-start mb-12 gap-8 px-2">
+        <div>
+            <h2 class="text-3xl font-black text-secondary mb-2">Müştəri Rəyləri</h2>
+            <div class="h-1 w-12 bg-primary mb-4 rounded-full"></div>
+            <div class="flex items-center gap-4">
+                <div class="flex text-yellow-400">
+                    {% with rating=book.avg_rating %}
+                    <i class="{% if rating >= 1 %}fas{% elif rating >= 0.5 %}fas fa-star-half-alt{% else %}far{% endif %} fa-star"></i>
+                    <i class="{% if rating >= 2 %}fas{% elif rating >= 1.5 %}fas fa-star-half-alt{% else %}far{% endif %} fa-star"></i>
+                    <i class="{% if rating >= 3 %}fas{% elif rating >= 2.5 %}fas fa-star-half-alt{% else %}far{% endif %} fa-star"></i>
+                    <i class="{% if rating >= 4 %}fas{% elif rating >= 3.5 %}fas fa-star-half-alt{% else %}far{% endif %} fa-star"></i>
+                    <i class="{% if rating >= 5 %}fas{% elif rating >= 4.5 %}fas fa-star-half-alt{% else %}far{% endif %} fa-star"></i>
+                    {% endwith %}
+                </div>
+                <span class="text-lg font-black text-secondary">{{ book.avg_rating|floatformat:1 }} / 5.0</span>
+                <span class="text-gray-400 text-sm font-bold">({{ book.review_count }} rəy)</span>
+            </div>
+        </div>
+        
+        {% if user.is_authenticated %}
+        <button id="open-review-modal" class="btn btn-secondary px-8 py-3 rounded-xl shadow-lg hover:scale-105 transition flex items-center gap-2">
+            <i class="fas fa-edit"></i>
+            Rəy Yazın
+        </button>
+        {% else %}
+        <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="btn btn-secondary px-8 py-3 rounded-xl shadow-lg hover:scale-105 transition flex items-center gap-2">
+            <i class="fas fa-lock text-xs opacity-50"></i>
+            Rəy Yazmaq üçün Daxil Olun
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {% for review in book.reviews.all %}
+        {% if review.is_active %}
+        <div class="card p-6 border-none shadow-sm bg-white rounded-3xl border border-gray-50">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-secondary font-black border border-gray-100">
+                        {{ review.user.email|first|upper }}
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-secondary text-sm">{{ review.user.username|default:review.user.email }}</h4>
+                        <div class="flex items-center gap-2">
+                            <div class="flex text-yellow-400 text-xs">
+                                {% with r=review.rating %}
+                                <i class="{% if r >= 1 %}fas{% else %}far{% endif %} fa-star"></i>
+                                <i class="{% if r >= 2 %}fas{% else %}far{% endif %} fa-star"></i>
+                                <i class="{% if r >= 3 %}fas{% else %}far{% endif %} fa-star"></i>
+                                <i class="{% if r >= 4 %}fas{% else %}far{% endif %} fa-star"></i>
+                                <i class="{% if r >= 5 %}fas{% else %}far{% endif %} fa-star"></i>
+                                {% endwith %}
+                            </div>
+                            <span class="text-[10px] text-gray-400 font-bold">{{ review.created_at|date:"d M Y" }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col items-end gap-2">
+                    {% if review.is_verified_purchase %}
+                    <div class="bg-green-50 text-green-600 px-3 py-1 rounded-full text-[10px] font-black flex items-center gap-1 border border-green-100">
+                        <i class="fas fa-check-circle"></i>
+                        TƏSDİQLƏNMİŞ ALIŞ
+                    </div>
+                    {% endif %}
+                    
+                    {% if review.user == user %}
+                    <div class="flex items-center gap-2">
+                        <button class="edit-review-btn w-8 h-8 rounded-lg bg-gray-50 text-gray-400 hover:bg-secondary hover:text-white transition-all flex items-center justify-center text-xs" 
+                                data-id="{{ review.id }}" 
+                                data-rating="{{ review.rating }}" 
+                                data-comment="{{ review.comment }}">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button class="delete-review-btn w-8 h-8 rounded-lg bg-gray-50 text-gray-400 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center text-xs" 
+                                data-id="{{ review.id }}"
+                                data-url="{% url 'reviews:delete_review' review.id %}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <p class="text-gray-500 text-sm leading-relaxed">{{ review.comment }}</p>
+        </div>
+        {% endif %}
+        {% empty %}
+        <div class="col-span-full py-16 text-center bg-gray-50 rounded-[2rem] border-2 border-dashed border-gray-200">
+            <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 text-gray-200 text-2xl">
+                <i class="fas fa-comment-dots"></i>
+            </div>
+            <h3 class="text-lg font-bold text-secondary mb-1">Hələ rəy yoxdur</h3>
+            <p class="text-gray-400 text-sm mb-6">Bu kitab üçün ilk rəyi siz yazın!</p>
+            {% if user.is_authenticated %}
+            <button onclick="$('#open-review-modal').click()" class="btn btn-primary px-8 py-3 rounded-xl">İndi Yaz</button>
+            {% else %}
+            <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="btn btn-primary px-8 py-3 rounded-xl">İndi Yaz</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</section>

@@ -1,0 +1,54 @@
+{% if user.is_authenticated %}
+<!-- Review Modal -->
+<div id="review-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-secondary/80 backdrop-blur-sm animate-fade-in">
+    <div class="bg-white w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden transform transition-all scale-95 opacity-0 duration-300" id="review-modal-content">
+        <div class="p-8 md:p-12">
+            <div class="flex justify-between items-center mb-10">
+                <div>
+                    <h2 class="text-2xl font-black text-secondary" id="review-modal-title">Rəy Bildirin</h2>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">Düşüncələriniz bizim üçün önəmlidir</p>
+                </div>
+                <button id="close-review-modal" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form id="review-form" action="{% url 'reviews:add_review' book.id %}" data-add-url="{% url 'reviews:add_review' book.id %}" method="POST" class="space-y-8">
+                {% csrf_token %}
+                
+                <!-- Star Rating Picker -->
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Qiymətləndirin</label>
+                    <div class="flex items-center gap-3">
+                        <div class="flex text-3xl gap-2 text-gray-200" id="star-rating-picker">
+                            <i class="fas fa-star cursor-pointer hover:text-yellow-400 transition-colors" data-rating="1"></i>
+                            <i class="fas fa-star cursor-pointer hover:text-yellow-400 transition-colors" data-rating="2"></i>
+                            <i class="fas fa-star cursor-pointer hover:text-yellow-400 transition-colors" data-rating="3"></i>
+                            <i class="fas fa-star cursor-pointer hover:text-yellow-400 transition-colors" data-rating="4"></i>
+                            <i class="fas fa-star cursor-pointer hover:text-yellow-400 transition-colors" data-rating="5"></i>
+                        </div>
+                        <span id="rating-label" class="text-sm font-black text-secondary ml-2">Seçin</span>
+                        {{ review_form.rating }}
+                    </div>
+                </div>
+
+                <!-- Comment Input -->
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Şərhiniz</label>
+                    {{ review_form.comment }}
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full btn btn-primary h-16 text-lg font-black rounded-2xl shadow-xl shadow-primary/20 flex items-center justify-center gap-3 group">
+                        <span>Göndər</span>
+                        <i class="fas fa-paper-plane transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"></i>
+                    </button>
+                    <p class="text-[10px] text-center text-gray-400 mt-6 font-bold uppercase tracking-widest">
+                        Rəyiniz yoxlanıldıqdan sonra saytda görünəcək
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}

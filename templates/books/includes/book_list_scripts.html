@@ -1,0 +1,106 @@
+<script>
+$(document).ready(function() {
+    const container = $('#book-list-container');
+    const overlay = $('#loading-overlay');
+    const filterForm = $('form');
+
+    function updateSection(url, pushState = true) {
+        overlay.removeClass('opacity-0 pointer-events-none');
+        
+        $.ajax({
+            url: url,
+            headers: {'X-Requested-With': 'XMLHttpRequest'},
+            success: function(data) {
+                container.html(data);
+                if (pushState) {
+                    window.history.pushState({path: url}, '', url);
+                }
+                overlay.addClass('opacity-0 pointer-events-none');
+                
+                // Active category highlight management
+                const newUrl = new URL(url, window.location.origin);
+                const pathParts = newUrl.pathname.split('/');
+                const slugCandidate = pathParts[pathParts.length - 2] || '';
+                
+                $('.ajax-filter-link').removeClass('bg-penguin-navy bg-penguin-orange text-white font-bold shadow-md')
+                    .addClass('text-gray-600');
+                
+                if (newUrl.pathname === '{% url "books:book_list" %}') {
+                    $('.ajax-filter-link[href="{% url "books:book_list" %}"]').addClass('bg-penguin-orange text-white font-bold shadow-md').removeClass('text-gray-600');
+                } else {
+                    $(`.ajax-filter-link[href*="${slugCandidate}"]`).addClass('bg-penguin-navy text-white font-bold shadow-md').removeClass('text-gray-600');
+                }
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    }
+
+    // Handle form input changes for instant filtering
+    filterForm.on('change', 'input[type="radio"], select', function() {
+        const url = filterForm.attr('action') + '?' + filterForm.serialize();
+        updateSection(url);
+    });
+
+    // Category Sidebar AJAX clicks
+    $(document).on('click', '.ajax-filter-link', function(e) {
+        e.preventDefault();
+        updateSection($(this).attr('href'));
+    });
+
+    // Real-time Category Search in Sidebar
+    $('#cat-search').on('input', function() {
+        const val = $(this).val().toLowerCase();
+        $('.cat-item').each(function() {
+            const name = $(this).find('a').data('name');
+            if (name.includes(val)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
+
+    // Debounce search input
+    let searchTimeout;
+    filterForm.on('input', 'input[name="q"]', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const url = filterForm.attr('action') + '?' + filterForm.serialize();
+            updateSection(url);
+        }, 500);
+    });
+
+    // Handle pagination through AJAX
+    $(document).on('click', '.ajax-page', function(e) {
+        e.preventDefault();
+        const url = $(this).attr('href');
+        updateSection(url);
+    });
+
+    // Handle sorting change (inside the dynamic content)
+    $(document).on('change', 'select[name="sort"]', function() {
+        const sortVal = $(this).val();
+        let currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set('sort', sortVal);
+        updateSection(currentUrl.toString());
+    });
+
+    // Handle back/forward browser buttons
+    window.onpopstate = function(e) {
+        if (e.state) {
+            updateSection(e.state.path, false);
+        }
+    };
+});
+</script>
+
+<style>
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+</style>

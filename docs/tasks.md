@@ -118,6 +118,6 @@ This document serves as the primary tracking mechanism for the development of Ol
 ## � 10. Production Deployment
 *Optimizing and launching the bookstore.*
 
-- [ ] **Production Readiness**
-    - **Tasks:** PostgreSQL migration, Gunicorn/Nginx configuration, Security headers.
-    - **Visual/Functional Result:** A lightning-fast Bookstore accessible via a secure HTTPS domain.
+- [x] **Production Readiness (PythonAnywhere / SQLite)** 
+    - **Tasks:** Security headers configuration, WSGI optimization, Static file handling (WhiteNoise), PA-specific environment variables.
+    - **Visual/Functional Result:** A secure Bookstore running on PythonAnywhere via HTTPS.

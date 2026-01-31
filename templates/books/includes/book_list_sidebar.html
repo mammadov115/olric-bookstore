@@ -1,0 +1,88 @@
+<!-- Sidebar: Categories & Filters -->
+<aside class="md:w-1/4">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 sticky top-8">
+        <h2 class="text-xl font-bold text-penguin-navy mb-6">Filterlər</h2>
+        
+        <form action="." method="get" class="space-y-8">
+            <!-- Search (Included in sidebar for convenience) -->
+            <div>
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Axtarış</h3>
+                <div class="relative">
+                    <input name="q" value="{{ search_query }}" type="text" placeholder="Kitab adı, müəllif..." class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-penguin-orange focus:border-transparent transition">
+                    <button type="submit" class="absolute right-3 top-3 text-gray-400 hover:text-penguin-orange">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div>
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Kateqoriyalar</h3>
+                
+                <!-- Category Search/Filter -->
+                <div class="relative mb-4">
+                    <input type="text" id="cat-search" placeholder="Kateqoriya axtar..." class="w-full bg-gray-50 border border-gray-100 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-penguin-orange">
+                </div>
+
+                <ul id="categories-list" class="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                    <li>
+                        <a href="{% url 'books:book_list' %}" class="ajax-filter-link block py-2 px-4 rounded-lg {% if not current_category %}bg-penguin-orange text-white font-bold shadow-md{% else %}text-gray-600 hover:bg-gray-50 hover:text-penguin-orange transition{% endif %}">
+                            Hamısı
+                        </a>
+                    </li>
+                    {% for cat in all_categories %}
+                    <li class="cat-item">
+                        <a href="{% url 'books:category_books' cat.slug %}" class="ajax-filter-link block py-2 px-4 rounded-lg {% if current_category.id == cat.id %}bg-penguin-navy text-white font-bold shadow-md{% else %}text-gray-600 hover:bg-gray-50 hover:text-penguin-navy transition{% endif %}" data-name="{{ cat.name|lower }}">
+                            {{ cat.name }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Price Range -->
+            <div>
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Qiymət Aralığı</h3>
+                <div class="flex items-center space-x-2">
+                    <input name="min_price" value="{{ active_min_price }}" type="number" placeholder="Min" class="w-1/2 bg-gray-50 border border-gray-100 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-penguin-orange">
+                    <span class="text-gray-300">-</span>
+                    <input name="max_price" value="{{ active_max_price }}" type="number" placeholder="Max" class="w-1/2 bg-gray-50 border border-gray-100 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-penguin-orange">
+                </div>
+            </div>
+
+            <!-- Format -->
+            <div>
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Format</h3>
+                <div class="space-y-2">
+                    {% for value, label in formats %}
+                    <label class="flex items-center group cursor-pointer">
+                        <input type="radio" name="format" value="{{ value }}" {% if active_format == value %}checked{% endif %} class="hidden peer">
+                        <div class="w-5 h-5 border-2 border-gray-200 rounded-md mr-3 peer-checked:bg-penguin-orange peer-checked:border-penguin-orange transition flex items-center justify-center">
+                            <i class="fas fa-check text-[10px] text-white opacity-0 peer-checked:opacity-100"></i>
+                        </div>
+                        <span class="text-gray-600 group-hover:text-penguin-navy transition">{{ label }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Authors -->
+            <div>
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Yazıçılar</h3>
+                <select name="author" class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-penguin-orange appearance-none">
+                    <option value="">Bütün yazıçılar</option>
+                    {% for author in authors %}
+                    <option value="{{ author.id }}" {% if active_author == author.id|stringformat:"i" %}selected{% endif %}>{{ author.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="pt-4">
+                <button type="submit" class="w-full bg-penguin-navy text-white py-4 rounded-xl font-bold hover:bg-penguin-orange transition shadow-lg">
+                    Filtrləri Tətbiq Et
+                </button>
+                <a href="." class="block text-center text-xs text-gray-400 mt-4 hover:text-red-500 transition">Filtrləri təmizlə</a>
+            </div>
+        </form>
+    </div>
+</aside>

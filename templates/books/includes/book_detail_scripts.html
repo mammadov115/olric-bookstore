@@ -1,0 +1,196 @@
+<script>
+$(document).ready(function() {
+    $('.qty-btn').on('click', function() {
+        const btn = $(this);
+        const input = $('#detail-qty');
+        const action = btn.data('action');
+        let currentVal = parseInt(input.val());
+
+        if (action === 'plus') {
+            currentVal++;
+        } else if (action === 'minus' && currentVal > 1) {
+            currentVal--;
+        }
+
+        input.val(currentVal);
+        $('#detail-add-btn').data('qty', currentVal);
+    });
+    
+    // Set initial qty for the add button
+    $('#detail-add-btn').data('qty', $('#detail-qty').val());
+
+    // --- Review Modal Logic ---
+    const modal = $('#review-modal');
+    const modalContent = $('#review-modal-content');
+    const openBtn = $('#open-review-modal');
+    const closeBtn = $('#close-review-modal');
+    
+    // Rating Elements
+    const stars = $('#star-rating-picker i');
+    const ratingInput = $('input[name="rating"]');
+    const ratingLabel = $('#rating-label');
+    const ratingTexts = {
+        1: 'Pis',
+        2: 'Kafi',
+        3: 'Yaxşı',
+        4: 'Çox Yaxşı',
+        5: 'Mükəmməl'
+    };
+
+    function toggleModal(show) {
+        if (show) {
+            modal.removeClass('hidden').addClass('flex');
+            setTimeout(() => {
+                modalContent.removeClass('scale-95 opacity-0').addClass('scale-100 opacity-100');
+            }, 10);
+            $('body').addClass('overflow-hidden');
+        } else {
+            modalContent.removeClass('scale-100 opacity-100').addClass('scale-95 opacity-0');
+            setTimeout(() => {
+                modal.removeClass('flex').addClass('hidden');
+                $('body').removeClass('overflow-hidden');
+            }, 300);
+        }
+    }
+
+    if (openBtn.length) {
+        openBtn.on('click', function() {
+            $('#review-modal-title').text('Rəy Bildirin');
+            $('#review-form').attr('action', $('#review-form').data('add-url'));
+            $('#review-form textarea').val('');
+            ratingInput.val('');
+            ratingLabel.text('Seçin');
+            stars.removeClass('text-yellow-400').addClass('text-gray-200');
+            toggleModal(true);
+        });
+    }
+
+    $('.edit-review-btn').on('click', function() {
+        const id = $(this).data('id');
+        const rating = $(this).data('rating');
+        const comment = $(this).data('comment');
+        
+        $('#review-modal-title').text('Rəyi Redaktə Et');
+        $('#review-form').attr('action', `/reviews/edit/${id}/`);
+        $('#review-form textarea').val(comment);
+        ratingInput.val(rating);
+        ratingLabel.text(ratingTexts[rating]);
+        
+        stars.each(function() {
+            if ($(this).data('rating') <= rating) {
+                $(this).addClass('text-yellow-400').removeClass('text-gray-200');
+            } else {
+                $(this).removeClass('text-yellow-400').addClass('text-gray-200');
+            }
+        });
+        
+        toggleModal(true);
+    });
+
+    $('.delete-review-btn').on('click', function() {
+        const url = $(this).data('url');
+        
+        Swal.fire({
+            title: 'Əminsiniz?',
+            text: "Bu rəyi silmək istədiyinizdən əminsiniz? Bu geri qaytarıla bilməz!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ff6600',
+            cancelButtonColor: '#3d3d3d',
+            confirmButtonText: 'Bəli, sil!',
+            cancelButtonText: 'Xeyr'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        Swal.fire('Silindi!', response.message, 'success').then(() => location.reload());
+                    },
+                    error: function() {
+                        Swal.fire('Xəta!', 'Rəy silinərkən xəta baş verdi.', 'error');
+                    }
+                });
+            }
+        });
+    });
+
+    if (closeBtn.length) {
+        closeBtn.on('click', () => toggleModal(false));
+    }
+    
+    if (modal.length) {
+        modal.on('click', (e) => {
+            if (e.target === modal[0]) toggleModal(false);
+        });
+    }
+
+    // --- Star Rating Interaction ---
+
+    stars.on('mouseenter', function() {
+        const r = $(this).data('rating');
+        stars.each(function() {
+            if ($(this).data('rating') <= r) {
+                $(this).addClass('text-yellow-400').removeClass('text-gray-200');
+            }
+        });
+    }).on('mouseleave', function() {
+        const r = ratingInput.val() || 0;
+        stars.each(function() {
+            if ($(this).data('rating') > r) {
+                $(this).removeClass('text-yellow-400').addClass('text-gray-200');
+            } else {
+                $(this).addClass('text-yellow-400').removeClass('text-gray-200');
+            }
+        });
+    }).on('click', function() {
+        const r = $(this).data('rating');
+        ratingInput.val(r);
+        ratingLabel.text(ratingTexts[r]);
+        stars.each(function() {
+            if ($(this).data('rating') <= r) {
+                $(this).addClass('text-yellow-400').removeClass('text-gray-200');
+            } else {
+                $(this).removeClass('text-yellow-400').addClass('text-gray-200');
+            }
+        });
+    });
+
+    // --- Review Form AJAX Submission ---
+    $('#review-form').on('submit', function(e) {
+        e.preventDefault();
+        const form = $(this);
+        const submitBtn = form.find('button[type="submit"]');
+        
+        if (!ratingInput.val()) {
+            Swal.fire('Diqqət!', 'Zəhmət olmasa reytinq seçin!', 'warning');
+            return;
+        }
+
+        submitBtn.prop('disabled', true).addClass('opacity-50').html('<i class="fas fa-circle-notch animate-spin"></i> Göndərilir...');
+
+        $.ajax({
+            url: form.attr('action'),
+            method: 'POST',
+            data: form.serialize(),
+            success: function(response) {
+                toggleModal(false);
+                Swal.fire({
+                    title: 'Uğurlu!',
+                    text: response.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3d3d3d'
+                }).then(() => location.reload());
+            },
+            error: function(xhr) {
+                const message = xhr.responseJSON ? xhr.responseJSON.message : 'Xəta baş verdi!';
+                Swal.fire('Xəta!', message, 'error');
+                submitBtn.prop('disabled', false).removeClass('opacity-50').html('<span>Göndər</span> <i class="fas fa-paper-plane"></i>');
+            }
+        });
+    });
+});
+</script>
