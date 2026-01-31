@@ -60,6 +60,12 @@
                     <i class="fas fa-search text-lg"></i>
                 </a>
 
+                {% if request.user.is_staff %}
+                <a href="{% url 'dashboard:index' %}" class="md:hidden w-10 h-10 flex items-center justify-center rounded-2xl bg-orange-50 text-primary hover:bg-primary hover:text-white transition-all shadow-sm border border-orange-100">
+                    <i class="fas fa-chart-pie text-lg"></i>
+                </a>
+                {% endif %}
+
                 <a href="{% url 'wishlist:wishlist_list' %}" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl text-secondary hover:bg-gray-100 transition-all relative">
                     <i class="far fa-heart text-lg"></i>
                     <span class="wishlist-count absolute -top-1 -right-1 bg-secondary text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full shadow-lg ring-4 ring-white {% if wishlist_count == 0 %}hidden{% endif %}">
@@ -83,22 +89,56 @@
                 </div>
                 
                 {% if request.user.is_authenticated %}
-                    <div class="hidden md:flex items-center gap-5">
-                        <div class="flex items-center gap-3 bg-gray-50 p-1.5 pr-5 rounded-2xl border border-gray-100 hover:border-primary/30 transition-colors cursor-pointer group">
-                            <div class="w-9 h-9 rounded-xl bg-secondary flex items-center justify-center text-white font-black text-xs shadow-lg group-hover:bg-primary transition-colors">
-                                {{ request.user.first_name|first|default:request.user.email|first|upper }}
-                            </div>
-                            <div class="flex flex-col">
-                                <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">Xoş gəldin</span>
-                                <span class="text-sm font-bold text-secondary leading-none">{{ request.user.first_name|default:request.user.email }}</span>
+                    <div class="hidden md:flex items-center gap-4">
+                        <div class="relative group">
+                            <button class="flex items-center gap-3 bg-gray-50 p-1.5 pr-5 rounded-2xl border border-gray-100 hover:border-primary/30 transition-colors cursor-pointer group">
+                                <div class="w-9 h-9 rounded-xl bg-secondary flex items-center justify-center text-white font-black text-xs shadow-lg group-hover:bg-primary transition-colors">
+                                    {{ request.user.first_name|first|default:request.user.email|first|upper }}
+                                </div>
+                                <div class="flex flex-col text-left">
+                                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">Hesabım</span>
+                                    <span class="text-sm font-bold text-secondary leading-none">{{ request.user.first_name|default:request.user.email }}</span>
+                                </div>
+                                <i class="fas fa-chevron-down text-[10px] text-gray-400 ml-2 group-hover:text-primary transition-colors"></i>
+                            </button>
+                            
+                            <!-- Dropdown Menu -->
+                            <div class="absolute right-0 mt-2 w-56 bg-white rounded-[1.5rem] shadow-2xl border border-gray-100 py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50">
+                                {% if request.user.is_staff %}
+                                <div class="px-4 py-2 border-b border-gray-50 mb-2">
+                                    <p class="text-[9px] font-black text-primary uppercase tracking-[0.2em]">Admin Menyu</p>
+                                </div>
+                                <a href="{% url 'dashboard:index' %}" class="flex items-center gap-3 px-5 py-2.5 text-sm font-bold text-secondary hover:bg-orange-50 hover:text-primary transition-colors">
+                                    <i class="fas fa-chart-line w-5"></i>
+                                    Custom Dashboard
+                                </a>
+                                <a href="/admin/" class="flex items-center gap-3 px-5 py-2.5 text-sm font-bold text-secondary hover:bg-slate-50 transition-colors">
+                                    <i class="fas fa-tools w-5"></i>
+                                    Django Admin
+                                </a>
+                                <div class="border-t border-gray-50 my-2"></div>
+                                {% endif %}
+                                
+                                <a href="{% url 'orders:order_list' %}" class="flex items-center gap-3 px-5 py-2.5 text-sm font-bold text-secondary hover:bg-gray-50 transition-colors">
+                                    <i class="fas fa-box w-5"></i>
+                                    Sifarişlərim
+                                </a>
+                                <a href="{% url 'wishlist:wishlist_list' %}" class="flex items-center gap-3 px-5 py-2.5 text-sm font-bold text-secondary hover:bg-gray-50 transition-colors">
+                                    <i class="fas fa-heart w-5"></i>
+                                    İstək Siyahısı
+                                </a>
+                                
+                                <div class="border-t border-gray-50 mt-2 pt-2">
+                                    <form action="{% url 'accounts:logout' %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="w-full flex items-center gap-3 px-5 py-2.5 text-sm font-bold text-red-500 hover:bg-red-50 transition-colors">
+                                            <i class="fas fa-power-off w-5"></i>
+                                            Çıxış
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                        <form action="{% url 'accounts:logout' %}" method="post" class="inline">
-                            {% csrf_token %}
-                            <button type="submit" class="w-10 h-10 flex items-center justify-center rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all">
-                                <i class="fas fa-power-off text-lg"></i>
-                            </button>
-                        </form>
                     </div>
                 {% else %}
                     <a href="{% url 'accounts:login' %}" class="hidden md:flex btn-primary px-8 py-3 rounded-2xl text-sm font-black shadow-xl">Giriş</a>

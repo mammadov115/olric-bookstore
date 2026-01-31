@@ -40,10 +40,11 @@ class Order(models.Model):
     
     STATUS_CHOICES = [
         ('pending', 'Gözləyir'),
-        ('confirmed', 'Təsdiqləndi'),
         ('processing', 'Hazırlanır'),
-        ('shipped', 'Göndərildi'),
-        ('delivered', 'Çatdırıldı'),
+        ('assigned', 'Kuryer təyin edildi'),
+        ('picked_up', 'Götürülüb'),
+        ('in_transit', 'Yoldadır'),
+        ('delivered', 'Çatdırılıb'),
         ('cancelled', 'Ləğv edildi'),
     ]
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')

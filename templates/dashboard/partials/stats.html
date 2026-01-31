@@ -2,7 +2,10 @@
     <!-- Stats Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Revenue -->
-        <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 group hover:shadow-xl hover:shadow-penguin-orange/5 transition-all duration-500">
+        <div hx-get="{% url 'dashboard:revenue' %}" 
+             hx-target="#dashboard-content" 
+             hx-push-url="true"
+             class="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 group hover:shadow-xl hover:shadow-penguin-orange/5 transition-all duration-500 cursor-pointer">
             <div class="flex items-center justify-between mb-4">
                 <div class="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center group-hover:bg-penguin-orange transition-colors">
                     <i class="fas fa-money-bill-wave text-penguin-orange group-hover:text-white"></i>
@@ -17,7 +20,10 @@
         </div>
 
         <!-- Orders -->
-        <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 group hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-500">
+        <div hx-get="{% url 'dashboard:orders' %}" 
+             hx-target="#dashboard-content" 
+             hx-push-url="true"
+             class="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 group hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-500 cursor-pointer">
             <div class="flex items-center justify-between mb-4">
                 <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center group-hover:bg-blue-500 transition-colors">
                     <i class="fas fa-shopping-cart text-blue-500 group-hover:text-white"></i>
@@ -71,19 +77,76 @@
                     Həftəlik Görünüş
                 </div>
             </div>
-{% load l10n %}
-            <div class="h-72 w-full flex items-end justify-between gap-4 pb-2 px-4">
-                {% for day in chart_data %}
-                <div class="flex-grow bg-slate-200 rounded-t-2xl transition-all hover:bg-penguin-orange group relative cursor-pointer" style="height: {{ day.height|unlocalize }}%; min-width: 40px;">
-                    <div class="absolute -top-12 left-1/2 -translate-x-1/2 bg-penguin-navy text-white text-[10px] py-2 px-3 rounded-xl opacity-0 group-hover:opacity-100 transition-all shadow-xl whitespace-nowrap z-50">
-                        <span class="font-black">{{ day.revenue|unlocalize }} AZN</span>
-                    </div>
-                    <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-black text-slate-400 uppercase whitespace-nowrap">
-                        {{ day.date }}
-                    </div>
-                </div>
-                {% endfor %}
+            <div class="h-80 w-full">
+                <canvas id="revenueChart"></canvas>
             </div>
+            
+            <script>
+                (function() {
+                    const ctx = document.getElementById('revenueChart').getContext('2d');
+                    
+                    // Gradient creation
+                    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+                    gradient.addColorStop(0, 'rgba(255, 102, 0, 0.4)');
+                    gradient.addColorStop(1, 'rgba(255, 102, 0, 0.0)');
+
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: {{ chart_labels|safe }},
+                            datasets: [{
+                                label: 'Gəlir (AZN)',
+                                data: {{ chart_revenue|safe }},
+                                borderColor: '#FF6600',
+                                backgroundColor: gradient,
+                                borderWidth: 4,
+                                fill: true,
+                                tension: 0.4,
+                                pointBackgroundColor: '#fff',
+                                pointBorderColor: '#FF6600',
+                                pointBorderWidth: 2,
+                                pointRadius: 4,
+                                pointHoverRadius: 6
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    backgroundColor: '#003B5C',
+                                    titleFont: { size: 13, weight: 'bold' },
+                                    bodyFont: { size: 12 },
+                                    padding: 12,
+                                    displayColors: false,
+                                    callbacks: {
+                                        label: function(context) {
+                                            return context.parsed.y.toFixed(2) + ' AZN';
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    grid: { display: false },
+                                    ticks: { 
+                                        font: { size: 11, weight: '600' },
+                                        color: '#94a3b8'
+                                    }
+                                },
+                                y: {
+                                    grid: { color: '#f1f5f9' },
+                                    ticks: { 
+                                        font: { size: 11, weight: '600' },
+                                        color: '#94a3b8'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                })();
+            </script>
         </div>
 
         <!-- Recent Activity -->
@@ -102,9 +165,14 @@
                     <div class="text-right">
                         <p class="text-sm font-black text-penguin-navy">{{ order.total_amount|floatformat:2 }}</p>
                         <span class="text-[9px] font-bold px-2 py-0.5 rounded-full 
-                            {% if order.status == 'delivered' %}bg-green-100 text-green-600
-                            {% elif order.status == 'pending' %}bg-yellow-100 text-yellow-600
-                            {% else %}bg-blue-100 text-blue-600{% endif %}">
+                            {% if order.status == 'pending' %}bg-yellow-100 text-yellow-600
+                            {% elif order.status == 'processing' %}bg-indigo-100 text-indigo-600
+                            {% elif order.status == 'assigned' %}bg-blue-100 text-blue-600
+                            {% elif order.status == 'picked_up' %}bg-orange-100 text-orange-600
+                            {% elif order.status == 'in_transit' %}bg-emerald-100 text-emerald-600
+                            {% elif order.status == 'delivered' %}bg-green-100 text-green-600
+                            {% elif order.status == 'cancelled' %}bg-red-100 text-red-600
+                            {% else %}bg-slate-100 text-slate-600{% endif %}">
                             {{ order.get_status_display }}
                         </span>
                     </div>

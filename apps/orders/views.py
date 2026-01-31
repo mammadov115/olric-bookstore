@@ -87,32 +87,51 @@ def order_track(request, order_number):
     # Define all possible statuses with display info
     tracking_stages = [
         {'key': 'pending', 'label': 'Gözləyir', 'icon': 'clock'},
-        {'key': 'assigned', 'label': 'Kuryer təyin edilib', 'icon': 'user-check'},
+        {'key': 'processing', 'label': 'Hazırlanır', 'icon': 'box-open'},
+        {'key': 'assigned', 'label': 'Kuryer təyin edildi', 'icon': 'user-check'},
         {'key': 'picked_up', 'label': 'Götürülüb', 'icon': 'box'},
         {'key': 'in_transit', 'label': 'Yoldadır', 'icon': 'truck'},
         {'key': 'delivered', 'label': 'Çatdırılıb', 'icon': 'check-circle'},
     ]
     
-    # Get current delivery status
-    current_status = None
-    delivery = None
-    if hasattr(order, 'delivery'):
-        delivery = order.delivery
-        current_status = delivery.status
+    # Get current status
+    # Priority: Delivery Status (if active) > Order Status
+    current_status = order.status
     
-    # Mark stages as complete based on current status
-    status_order = ['pending', 'assigned', 'picked_up', 'in_transit', 'delivered']
-    current_index = status_order.index(current_status) if current_status in status_order else -1
+    # Map internal statuses to display stages
+    if current_status == 'confirmed':
+        current_status = 'processing'
+    elif current_status == 'shipped':
+        current_status = 'in_transit'
+
+    if hasattr(order, 'delivery') and order.delivery:
+        delivery_status = order.delivery.status
+        # If delivery has progressed beyond pending, let it override
+        if delivery_status not in ['pending', 'failed']:
+             current_status = delivery_status
     
+    # Status progression list for index calculation
+    status_order = [s['key'] for s in tracking_stages]
+    
+    current_index = -1
+    if current_status in status_order:
+        current_index = status_order.index(current_status)
+    
+    # Calculate progress percentage for the bar
+    progress_percentage = 0
+    if current_index >= 0:
+        progress_percentage = (current_index / (len(tracking_stages) - 1)) * 100
+        
     for i, stage in enumerate(tracking_stages):
         stage['is_complete'] = i <= current_index
         stage['is_current'] = i == current_index
     
     context = {
         'order': order,
-        'delivery': delivery,
+        'delivery': getattr(order, 'delivery', None),
         'tracking_stages': tracking_stages,
         'current_status': current_status,
+        'progress_percentage': progress_percentage,
     }
     
     return render(request, 'orders/order_track.html', context)

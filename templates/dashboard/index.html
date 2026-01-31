@@ -9,6 +9,8 @@
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -96,6 +98,14 @@
                         class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group hover:bg-white/10">
                     <i class="fas fa-users text-lg transition-transform group-hover:scale-110"></i>
                     <span class="font-semibold">İstifadəçilər</span>
+                </button>
+                
+                <button hx-get="{% url 'dashboard:couriers' %}" 
+                        hx-target="#dashboard-content" 
+                        hx-push-url="true"
+                        class="sidebar-link w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group hover:bg-white/10">
+                    <i class="fas fa-biking text-lg transition-transform group-hover:scale-110"></i>
+                    <span class="font-semibold">Kuryerlər</span>
                 </button>
             </nav>
 

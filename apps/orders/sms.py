@@ -77,12 +77,21 @@ class SMSService:
     @staticmethod
     def format_order_status_message(order, delivery):
         """Generate SMS message based on delivery status"""
-        messages = {
-            'pending': f"Salam! #{order.order_number} sifarişiniz qəbul edildi. Tezliklə kuryer təyin ediləcək.",
-            'assigned': f"Kuryer təyin edildi! {delivery.courier.name} ({delivery.courier.phone}) sifarişi çatdıracaq.",
-            'picked_up': f"Sifarişiniz kuryer tərəfindən götürülüb və yola çıxıb.",
-            'in_transit': f"Sifarişiniz yoldadır. Tezliklə çatdırılacaq.",
-            'delivered': f"Sifarişiniz çatdırılıb! Olric Bookstore'u seçdiyiniz üçün təşəkkür edirik! 📚",
-            'failed': f"Çatdırılma zamanı problem yarandı. Zəhmət olmasa bizimlə əlaqə saxlayın."
-        }
-        return messages.get(delivery.status, f"Sifarişiniz statusu: {delivery.get_status_display()}")
+        status = delivery.status
+        
+        if status == 'pending':
+            return f"Salam! #{order.order_number} sifarişiniz qəbul edildi. Tezliklə kuryer təyin ediləcək."
+        elif status == 'assigned':
+            courier_name = delivery.courier.name if delivery.courier else "Kuryer"
+            courier_phone = f" ({delivery.courier.phone})" if delivery.courier else ""
+            return f"Kuryer təyin edildi! {courier_name}{courier_phone} sifarişi çatdıracaq."
+        elif status == 'picked_up':
+            return f"Sifarişiniz kuryer tərəfindən götürülüb və yola çıxıb."
+        elif status == 'in_transit':
+            return f"Sifarişiniz yoldadır. Tezliklə çatdırılacaq."
+        elif status == 'delivered':
+            return f"Sifarişiniz çatdırılıb! Olric Bookstore'u seçdiyiniz üçün təşəkkür edirik! 📚"
+        elif status == 'failed':
+            return f"Çatdırılma zamanı problem yarandı. Zəhmət olmasa bizimlə əlaqə saxlayın."
+        
+        return f"Sifarişiniz statusu: {delivery.get_status_display()}"

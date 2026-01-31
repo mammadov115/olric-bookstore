@@ -1,0 +1,74 @@
+<div class="animate-fade-in space-y-6">
+    <!-- Action Header -->
+    <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex justify-between items-center">
+        <div>
+            <h3 class="text-xl font-black text-penguin-navy">Gəlir Detalları</h3>
+            <p class="text-xs text-slate-400">Yalnız tamamlanmış və təsdiqlənmiş ödənişlər göstərilir</p>
+        </div>
+        <div class="bg-green-50 px-6 py-3 rounded-2xl border border-green-100 italic">
+            <span class="text-sm font-black text-green-600">Ümumi: {{ orders.count }} uğurlu satış</span>
+        </div>
+    </div>
+
+    <!-- Revenue List -->
+    <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50/50">
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Sifariş №</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Müştəri</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Tarix</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Metod</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Məbləğ</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for order in orders %}
+                    <tr class="hover:bg-slate-50/50 transition-colors group cursor-pointer">
+                        <td class="px-8 py-6">
+                            <span class="text-sm font-black text-penguin-navy">#{{ order.order_number }}</span>
+                        </td>
+                        <td class="px-8 py-6">
+                            <div class="flex flex-col">
+                                <span class="text-sm font-bold text-slate-800">{{ order.full_name }}</span>
+                                <span class="text-[10px] text-slate-400">{{ order.email }}</span>
+                            </div>
+                        </td>
+                        <td class="px-8 py-6">
+                            <span class="text-xs text-slate-600 font-medium">{{ order.created_at|date:"d M Y, H:i" }}</span>
+                        </td>
+                        <td class="px-8 py-6">
+                            <span class="text-[10px] font-black text-slate-500 uppercase tracking-wider">
+                                {% if order.payment_method == 'card' %}
+                                <i class="fas fa-credit-card mr-1 text-blue-500"></i> Kart
+                                {% else %}
+                                <i class="fas fa-money-bill mr-1 text-green-500"></i> Nağd
+                                {% endif %}
+                            </span>
+                        </td>
+                        <td class="px-8 py-6">
+                            <span class="text-sm font-black text-penguin-navy">{{ order.total_amount|floatformat:2 }} AZN</span>
+                        </td>
+                        <td class="px-8 py-6">
+                            <span class="px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-wider
+                                {% if order.status == 'delivered' %}bg-green-50 text-green-600
+                                {% elif order.status == 'cancelled' %}bg-red-50 text-red-600
+                                {% else %}bg-blue-50 text-blue-600{% endif %}">
+                                {{ order.get_status_display }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="px-8 py-12 text-center text-slate-400 font-medium italic">
+                            Hələ ki heç bir gəlir qeydə alınmayıb.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
